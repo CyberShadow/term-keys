@@ -159,43 +159,44 @@ Can be any character other than a lower-case hexadecimal
 digit (which is used to encode term-keys key codes).")
 (setq term-keys/suffix "}")
 
-(defun term-keys/want-key-p (key shift control alt)
+(defun term-keys/want-key-p (key shift control meta)
   "Return non-nil for keys that should be encoded.
 
 This function controls which key combinations are to be encoded
 and decoded using the term-keys protocol extension.  KEY is the
 KeySym name as listed in `term-keys/mapping'; SHIFT, CONTROL and
-ALT are t or nil depending on whether they are depressed or not."
+META are t or nil depending on whether they are depressed or
+not."
   (or
-   (and (string-equal key "g") control alt)
-   (and (member key '("Up" "Down" "Left" "Right" "Home" "End" "Prior" "Next")) control (or shift alt))
+   (and (string-equal key "g") control meta)
+   (and (member key '("Up" "Down" "Left" "Right" "Home" "End" "Prior" "Next")) control (or shift meta))
    (and (string-equal key "Tab") control)
    ))
 
-(defun term-keys/format-key (key shift control alt)
+(defun term-keys/format-key (key shift control meta)
   "Format key modifiers in Emacs/urxvt syntax.
 
 Returns KEY prepended with S-, C- or M- depending on whether
-SHIFT, CONTROL or ALT are correspondingly non-nil."
+SHIFT, CONTROL or META are correspondingly non-nil."
   (concat
    (if shift "S-" "")
    (if control "C-" "")
-   (if alt "M-" "")
+   (if meta "M-" "")
    key))
 
-(defun term-keys/encode-key (key shift control alt)
+(defun term-keys/encode-key (key shift control meta)
   "Encode a key combination to term-keys' protocol.
 
 Returns a string ready to be sent by a terminal emulator (or
 received by Emacs running in a terminal) which encodes the
 combination of KEY (the key's index in the `term-keys/mapping'
-table) and SHIFT, CONTROL or ALT (indicating whether they're
+table) and SHIFT, CONTROL or META (indicating whether they're
 pressed or not)."
   (format "%x%x"
 	  (+
 	   (if shift 1 0)
 	   (if control 2 0)
-	   (if alt 4 0))
+	   (if meta 4 0))
 	  key))
 
 (require 'cl-lib)
@@ -211,15 +212,15 @@ pressed or not)."
 	 (cl-loop
 	  for control in '(nil t) do
 	  (cl-loop
-	   for alt in '(nil t)
-	   if (and (cdr pair) (term-keys/want-key-p (car pair) shift control alt))
+	   for meta in '(nil t)
+	   if (and (cdr pair) (term-keys/want-key-p (car pair) shift control meta))
 	   do (define-key
 		input-decode-map
 		(concat
 		 term-keys/prefix
-		 (term-keys/encode-key num shift control alt)
+		 (term-keys/encode-key num shift control meta)
 		 term-keys/suffix)
-		(kbd (term-keys/format-key (cdr pair) shift control alt)))))))
+		(kbd (term-keys/format-key (cdr pair) shift control meta)))))))
       (setq num (1+ num))
       (setq keys (cdr keys)))))
 
@@ -240,17 +241,17 @@ function)."
 	 (cl-loop
 	  for control in '(nil t) do
 	  (cl-loop
-	   for alt in '(nil t)
-	   if (and (cdr pair) (term-keys/want-key-p (car pair) shift control alt))
+	   for meta in '(nil t)
+	   if (and (cdr pair) (term-keys/want-key-p (car pair) shift control meta))
 	   do (setq args
 		    (apply #'list
 			   (concat
 			    "-keysym."
-			    (term-keys/format-key (car pair) shift control alt))
+			    (term-keys/format-key (car pair) shift control meta))
 			   (concat
 			    "string:"
 			    term-keys/prefix
-			    (term-keys/encode-key num shift control alt)
+			    (term-keys/encode-key num shift control meta)
 			    term-keys/suffix)
 			   args))))))
       (setq num (1+ num))
