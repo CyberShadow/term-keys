@@ -285,5 +285,18 @@ executable file and used for launching urxvt."
    (mapconcat #'shell-quote-argument (term-keys/urxvt-args) " \\\n\t")
    " \\\n\t\"$@\"\n"))
 
+(defun term-keys/urxvt-run-emacs ()
+  "Launch Emacs via urxvt enhanced with term-keys.
+
+This function is used for testing and as an example."
+  (apply #'call-process "urxvt" nil nil nil
+	 (append
+	  (term-keys/urxvt-args)
+	  (list
+	    "-e" (car command-line-args) "-nw"
+	    "--load" (or load-file-name buffer-file-name)
+	    "--funcall" "term-keys/init"
+	    ))))
+
 (provide 'term-keys)
 ;;; term-keys.el ends here
