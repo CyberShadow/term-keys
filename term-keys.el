@@ -211,6 +211,8 @@ pressed or not)."
 	  key))
 
 (require 'cl-lib)
+
+;;;###autoload
 (defun term-keys/init ()
   "Initialize term-keys."
 
