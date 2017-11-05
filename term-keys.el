@@ -168,9 +168,20 @@ KeySym name as listed in `term-keys/mapping'; SHIFT, CONTROL and
 META are t or nil depending on whether they are depressed or
 not."
   (or
+   ;; https://lists.gnu.org/archive/html/bug-gnu-emacs/2004-03/msg00306.html
    (and (string-equal key "g") control meta)
+
+   ;; Navigation keys and Control
    (and (member key '("Up" "Down" "Left" "Right" "Home" "End" "Prior" "Next")) control (or shift meta))
+
+   ;; Ctrl+Tab
    (and (string-equal key "Tab") control)
+
+   ;; C-S-x is unrepresentable for letters
+   (and (eq (length key) 1) control shift)
+
+   ;; Menu (Apps) key
+   (string-equal key "Menu")
    ))
 
 (defun term-keys/format-key (key shift control meta)
