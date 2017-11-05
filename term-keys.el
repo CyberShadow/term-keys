@@ -178,7 +178,10 @@ not."
    (and (string-equal key "Tab") control)
 
    ;; C-S-x is unrepresentable for letters
-   (and (eq (length key) 1) control shift)
+   (and (string-match-p "^[a-z]$" key) control shift)
+
+   ;; C-x is unrepresentable for digits
+   (and (string-match-p "^[0-9]$" key) control)
 
    ;; Menu (Apps) key
    (string-equal key "Menu")
@@ -260,7 +263,10 @@ function)."
 		    (apply #'list
 			   (concat
 			    "-keysym."
-			    (term-keys/format-key (car pair) shift control meta))
+			    (if (and shift (string-match-p "^[a-z]$" (car pair)))
+				;; Upcase letter keys
+				(term-keys/format-key (upcase (car pair)) nil control meta)
+			      (term-keys/format-key (car pair) shift control meta)))
 			   (concat
 			    "string:"
 			    term-keys/prefix
