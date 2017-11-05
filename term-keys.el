@@ -202,8 +202,6 @@ pressed or not)."
 (defun term-keys/init ()
   "Initialize term-keys."
 
-  ;; (global-unset-key (kbd "M-{"))
-
   (let ((num 0)
   	(keys term-keys/mapping))
     (while keys
@@ -223,9 +221,7 @@ pressed or not)."
 		 term-keys/suffix)
 		(kbd (term-keys/format-key (cdr pair) shift control alt)))))))
       (setq num (1+ num))
-      (setq keys (cdr keys))))
-  (message "term-keys/init !!!")
-  )
+      (setq keys (cdr keys)))))
 
 (defun term-keys/urxvt-args ()
   "Construct urxvt configuration in the form of command line arguments.
@@ -260,21 +256,6 @@ function)."
       (setq num (1+ num))
       (setq keys (cdr keys)))
     args))
-
-(defun term-keys/test ()
-  "Test it!"
-  (apply #'call-process "/bin/urxvt" nil nil nil
-	 (append
-	  (term-keys/urxvt-args)
-	  '(
-	    "-e" "/bin/emacs" "-nw"
-	    "--load" "/home/vladimir/tmp/2017-11-04-scratch/23:38:39/term-keys.el"
-	    "-q"
-	    "--funcall" "term-keys/init"
-	    ))))
-
-(when (boundp 'term-keys/devel)
-  (term-keys/test))
 
 (provide 'term-keys)
 ;;; term-keys.el ends here
