@@ -258,5 +258,21 @@ function)."
       (setq keys (cdr keys)))
     args))
 
+(defun term-keys/urxvt-script ()
+  "Construct urxvt configuration in the form of a shell script.
+
+This function returns, as a string, a shell script which launches
+urxvt (rxvt-unicode) configured to encode term-keys key
+sequences (as configured by the `term-keys/want-key-p'
+function).
+
+The returned string is suitable to be saved as-is in an
+executable file and used for launching urxvt."
+  (concat
+   "#!/bin/sh\n"
+   "exec urxvt \\\n\t"
+   (mapconcat #'shell-quote-argument (term-keys/urxvt-args) " \\\n\t")
+   " \\\n\t\"$@\"\n"))
+
 (provide 'term-keys)
 ;;; term-keys.el ends here
