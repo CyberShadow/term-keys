@@ -201,6 +201,24 @@ SHIFT, CONTROL or META are correspondingly non-nil."
    (if meta "M-" "")
    key))
 
+(require 'cl-lib)
+
+(defun term-keys/base64-encode (num)
+  "Encode integer NUM as base-64 string."
+  (base64-encode-string
+   (apply #'string
+	  (nreverse (cl-loop while (not (zerop num))
+			     collect (% num #x100)
+			     do (setq num (/ num #x100)))))
+   t))
+
+(defun term-keys/base64-decode (str)
+  "Decode string STR as base-64 string to an integer."
+  (cl-do ((bytes (append (base64-decode-string str) nil)
+		 (cdr bytes))
+	  (num 0 (+ (* num #x100) (car bytes))))
+      ((not bytes) num)))
+
 (defun term-keys/encode-key (key shift control meta)
   "Encode a key combination to term-keys' protocol.
 
@@ -209,14 +227,12 @@ received by Emacs running in a terminal) which encodes the
 combination of KEY (the key's index in the `term-keys/mapping'
 table) and SHIFT, CONTROL or META (indicating whether they're
 pressed or not)."
-  (format "%x%x"
+  (format "%x%s"
 	  (+
 	   (if shift 1 0)
 	   (if control 2 0)
 	   (if meta 4 0))
-	  key))
-
-(require 'cl-lib)
+	  (term-keys/base64-encode key)))
 
 (defun term-keys/iterate-keys (fun)
   "Call FUN over every enabled key combination.
