@@ -30,11 +30,6 @@
 
 ;; For more information, please see the accompanying README.md file.
 
-;;; TODO:
-
-;; - Make variables customizable
-;; - Make want-key-p customizable
-
 ;;; Code:
 
 (require 'cl-lib)
