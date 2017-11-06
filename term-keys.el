@@ -155,9 +155,10 @@ should by themselves be bound to an Emacs action.")
 (defvar term-keys/suffix nil
   "Key sequence suffix.
 
-Can be any character other than a lower-case hexadecimal
-digit (which is used to encode term-keys key codes).")
-(setq term-keys/suffix "}")
+Indicates the end of the data encoding the pressed key
+combination.  Can be any character which isn't used in the
+`term-keys/encode-number' encoding scheme.")
+(setq term-keys/suffix "\037")
 
 (defun term-keys/want-key-p (key shift control meta)
   "Return non-nil for keys that should be encoded.
@@ -203,21 +204,27 @@ SHIFT, CONTROL or META are correspondingly non-nil."
 
 (require 'cl-lib)
 
-(defun term-keys/base64-encode (num)
-  "Encode integer NUM as base-64 string."
-  (base64-encode-string
-   (apply #'string
-	  (nreverse (cl-loop while (not (zerop num))
-			     collect (% num #x100)
-			     do (setq num (/ num #x100)))))
-   t))
+(defun term-keys/encode-number (num)
+  "Efficiently encode integer NUM into a string.
 
-(defun term-keys/base64-decode (str)
-  "Decode string STR as base-64 string to an integer."
-  (cl-do ((bytes (append (base64-decode-string str) nil)
+Use only characters that can safely occur on a command line or
+configuration file.  Current implementation uses base-96 (ASCII
+\x20 .. \x7F)."
+  (apply #'string
+	 (nreverse (cl-loop while (not (zerop num))
+			       collect (+ 32 (% num 96))
+			       do (setq num (/ num 96))))))
+
+(defun term-keys/decode-number (str)
+  "Decode a string STR encoded by `term-keys/encode-number'."
+  (cl-do ((bytes (append str nil)
 		 (cdr bytes))
-	  (num 0 (+ (* num #x100) (car bytes))))
+	  (num 0 (+ (* num 96) (- (car bytes) 32))))
       ((not bytes) num)))
+
+(cl-loop for n in '(0 1 95 96 97 12345 123456789)
+	 do (cl-assert (eq (term-keys/decode-number
+			    (term-keys/encode-number n)) n)))
 
 (defun term-keys/encode-key (key shift control meta)
   "Encode a key combination to term-keys' protocol.
@@ -232,7 +239,7 @@ pressed or not)."
 	   (if shift 1 0)
 	   (if control 2 0)
 	   (if meta 4 0))
-	  (term-keys/base64-encode key)))
+	  (term-keys/encode-number key)))
 
 (defun term-keys/iterate-keys (fun)
   "Call FUN over every enabled key combination.
