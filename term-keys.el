@@ -240,6 +240,17 @@ pressed or not)."
       (setq num (1+ num))
       (setq keys (cdr keys)))))
 
+(defun term-keys/format-urxvt-key (key shift control meta)
+  "Format key modifiers in urxvt syntax.
+
+Returns KEY prepended with S-, C- or M- depending on whether
+SHIFT, CONTROL or META are correspondingly non-nil, additionally
+upcasing letter keys."
+  (if (and shift (string-match-p "^[a-z]$" key))
+      ;; Upcase letter keys
+      (term-keys/format-key (upcase key) nil control meta)
+    (term-keys/format-key key shift control meta)))
+
 (defun term-keys/urxvt-args ()
   "Construct urxvt configuration in the form of command line arguments.
 
@@ -263,10 +274,7 @@ function)."
 		    (apply #'list
 			   (concat
 			    "-keysym."
-			    (if (and shift (string-match-p "^[a-z]$" (car pair)))
-				;; Upcase letter keys
-				(term-keys/format-key (upcase (car pair)) nil control meta)
-			      (term-keys/format-key (car pair) shift control meta)))
+			    (term-keys/format-urxvt-key (car pair) shift control meta))
 			   (concat
 			    "string:"
 			    term-keys/prefix
