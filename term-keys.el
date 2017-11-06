@@ -329,11 +329,15 @@ Collect FUN's return values in a list and return it."
 (define-minor-mode term-keys-mode
   "`term-keys' global minor mode.
 
-When enabled, automatically set up configured keys for TTY
-terminals."
+When enabled, automatically set up configured keys for new frames
+on TTY terminals.  If the current frame is on a TTY, set it up as
+well."
   :global t
   (if term-keys-mode
-      (add-hook 'tty-setup-hook 'term-keys/init)
+      (progn
+	(add-hook 'tty-setup-hook 'term-keys/init)
+	(if (eq (framep-on-display) t)
+	    (term-keys/init)))
     (remove-hook 'tty-setup-hook 'term-keys/init)))
 
 
