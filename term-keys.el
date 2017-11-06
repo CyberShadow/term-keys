@@ -37,6 +37,9 @@
 
 ;;; Code:
 
+(require 'cl-lib)
+
+
 (defvar term-keys/mapping nil
   "List of keys supported by the term-keys package.
 
@@ -139,6 +142,7 @@ TODO: Finalize and document structure")
 	;; TODO: numpad
 	))
 
+
 (defvar term-keys/prefix nil
   "Key sequence prefix.
 
@@ -152,6 +156,7 @@ Emacs.  E.g. with the default, neither ^[, ^[^_, or ^[^_abc
 should by themselves be bound to an Emacs action.")
 (setq term-keys/prefix "\033\037")
 
+
 (defvar term-keys/suffix nil
   "Key sequence suffix.
 
@@ -159,6 +164,7 @@ Indicates the end of the data encoding the pressed key
 combination.  Can be any character which isn't used in the
 `term-keys/encode-number' encoding scheme.")
 (setq term-keys/suffix "\037")
+
 
 (defun term-keys/want-key-p (key shift control meta)
   "Return non-nil for keys that should be encoded.
@@ -191,6 +197,7 @@ not."
    (string-equal key "Menu")
    ))
 
+
 (defun term-keys/format-key (key shift control meta)
   "Format key modifiers in Emacs/urxvt syntax.
 
@@ -202,7 +209,6 @@ SHIFT, CONTROL or META are correspondingly non-nil."
    (if meta "M-" "")
    key))
 
-(require 'cl-lib)
 
 (defun term-keys/encode-number (num)
   "Efficiently encode integer NUM into a string.
@@ -215,6 +221,7 @@ configuration file.  Current implementation uses base-96 (ASCII
 			       collect (+ 32 (% num 96))
 			       do (setq num (/ num 96))))))
 
+
 (defun term-keys/decode-number (str)
   "Decode a string STR encoded by `term-keys/encode-number'."
   (cl-do ((bytes (append str nil)
@@ -225,6 +232,7 @@ configuration file.  Current implementation uses base-96 (ASCII
 (cl-loop for n in '(0 1 95 96 97 12345 123456789)
 	 do (cl-assert (eq (term-keys/decode-number
 			    (term-keys/encode-number n)) n)))
+
 
 (defun term-keys/encode-key (key shift control meta)
   "Encode a key combination to term-keys' protocol.
@@ -240,6 +248,7 @@ pressed or not)."
     (if control 2 0)
     (if meta 4 0)
     (* 8 key))))
+
 
 (defun term-keys/iterate-keys (fun)
   "Call FUN over every enabled key combination.
@@ -267,6 +276,7 @@ Collect FUN's return values in a list and return it."
 	  (term-keys/want-key-p (car pair) shift control meta))
       collect (funcall fun index pair shift control meta))))))
 
+
 ;;;###autoload
 (defun term-keys/init ()
   "Initialize term-keys."
@@ -282,6 +292,7 @@ Collect FUN's return values in a list and return it."
        (kbd (term-keys/format-key
 	     (cdr pair) shift control meta))))))
 
+
 (defun term-keys/format-urxvt-key (key shift control meta)
   "Format key modifiers in urxvt syntax.
 
@@ -292,6 +303,7 @@ upcasing letter keys."
       ;; Upcase letter keys
       (term-keys/format-key (upcase key) nil control meta)
     (term-keys/format-key key shift control meta)))
+
 
 (defun term-keys/urxvt-args ()
   "Construct urxvt configuration in the form of command line arguments.
@@ -313,6 +325,7 @@ function)."
 	      (term-keys/encode-key index shift control meta)
 	      term-keys/suffix))))))
 
+
 (defun term-keys/urxvt-script ()
   "Construct urxvt configuration in the form of a shell script.
 
@@ -328,6 +341,7 @@ executable file and used for launching urxvt."
    "exec urxvt \\\n\t"
    (mapconcat #'shell-quote-argument (term-keys/urxvt-args) " \\\n\t")
    " \\\n\t\"$@\"\n"))
+
 
 (defun term-keys/urxvt-xresources ()
   "Construct urxvt configuration in the form of .Xresources entries.
@@ -347,6 +361,7 @@ The returned string is suitable to be added as-is to an
 		    (term-keys/encode-key index shift control meta)
 		    term-keys/suffix)))))
 
+
 (defun term-keys/urxvt-run-emacs ()
   "Launch Emacs via urxvt enhanced with term-keys.
 
@@ -359,6 +374,7 @@ This function is used for testing and as an example."
 	    "--load" (or load-file-name buffer-file-name)
 	    "--funcall" "term-keys/init"
 	    ))))
+
 
 (provide 'term-keys)
 ;;; term-keys.el ends here
