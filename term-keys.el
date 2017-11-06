@@ -249,12 +249,12 @@ Returns KEY prepended with S-, C-, M-, s-, H-, or A- depending on
 whether SHIFT, CONTROL, META, SUPER, HYPER, or ALT are
 correspondingly non-nil."
   (concat
-   (if shift "S-" "")
+   (if shift   "S-" "")
    (if control "C-" "")
-   (if meta "M-" "")
-   (if super "s-" "")
-   (if hyper "H-" "")
-   (if alt "A-" "")
+   (if meta    "M-" "")
+   (if super   "s-" "")
+   (if hyper   "H-" "")
+   (if alt     "A-" "")
    key))
 
 
@@ -361,6 +361,9 @@ well."
     (remove-hook 'tty-setup-hook 'term-keys/init)))
 
 
+;; urxvt
+
+
 (defun term-keys/format-urxvt-key (key shift control meta super hyper alt)
   "Format key modifiers in urxvt syntax.
 
@@ -435,6 +438,110 @@ This function is used for testing and as an example."
   (apply #'call-process "urxvt" nil nil nil
 	 (append
 	  (term-keys/urxvt-args)
+	  (list
+	    "-e" (car command-line-args) "-nw"
+	    "--load" (or load-file-name buffer-file-name)
+	    "--funcall" "term-keys/init"
+	    ))))
+
+
+;; xterm
+
+
+(defun term-keys/format-xterm-key (key shift control meta super hyper alt)
+  "Format key modifiers in xterm key translation syntax.
+
+Returns the xterm translation string corresponding to the KEY and
+modifier state SHIFT, CONTROL, META, SUPER, HYPER, and ALT."
+  (concat
+   (if shift   " " "~") "Shift "
+   (if control " " "~") "Ctrl "
+   (if meta    " " "~") "Meta "
+   (if super   " " "~") "Super "
+   (if hyper   " " "~") "Hyper "
+   (if alt     " " "~") "Alt "
+   "<Key> "
+   ;; (if (and shift (string-match-p "^[a-z]$" key))
+   ;;    ;; Upcase letter keys
+   ;;     (upcase key)
+   ;;   key)))
+   key))
+
+
+(defun term-keys/xterm-translations ()
+  "Construct xterm configuration in the form of translation entries.
+
+This function returns, as a list of strings (one string per
+line), the xterm translation entries necessary to configure xterm
+to encode term-keys key sequences (as configured by
+`term-keys/want-key-p-func')."
+  (term-keys/iterate-keys
+   (lambda (index pair shift control meta super hyper alt)
+     (format "%-55s: %s"
+	     (term-keys/format-xterm-key (car pair) shift control meta super hyper alt)
+	     (mapconcat
+	      (lambda (c) (format "string(0x%02x)" c))
+	      (append
+	       term-keys/prefix
+	       (term-keys/encode-key index shift control meta super hyper alt)
+	       term-keys/suffix
+	       nil)
+	      " ")))))
+
+
+(defun term-keys/xterm-xresources ()
+  "Construct xterm configuration in the form of .Xresources entries.
+
+This function returns, as a string, the .Xresources entries
+necessary to configure xterm to encode term-keys key
+sequences (as configured by `term-keys/want-key-p-func').
+
+The returned string is suitable to be added as-is to an
+~/.Xresources file."
+  (apply #'concat
+	 "*VT100.Translations: #override \\\n"
+	 (mapcar (lambda (s) (concat s " \\\n"))
+		 (term-keys/xterm-translations))))
+
+
+(defun term-keys/xterm-args ()
+  "Construct xterm configuration in the form of command line arguments.
+
+This function returns a list of xterm command line arguments
+necessary to configure the terminal emulator to encode key
+sequences (as configured by `term-keys/want-key-p-func')."
+  (list
+   "-xrm"
+   (mapconcat #'identity
+	      (cons
+	       "XTerm.VT100.translations: #override"
+	       (term-keys/xterm-translations))
+	      "\\n")))
+
+
+(defun term-keys/xterm-script ()
+  "Construct xterm configuration in the form of a shell script.
+
+This function returns, as a string, a shell script which launches
+xterm configured to encode term-keys key sequences (as configured
+by `term-keys/want-key-p-func').
+
+The returned string is suitable to be saved as-is in an
+executable file and used for launching xterm."
+  (concat
+   "#!/bin/sh\n"
+   "exec xterm \\\n\t"
+   (mapconcat #'shell-quote-argument (term-keys/xterm-args) " \\\n\t")
+   " \\\n\t\"$@\"\n"))
+
+
+(defun term-keys/xterm-run-emacs ()
+  "Launch Emacs via xterm enhanced with term-keys.
+
+This function is used for testing and as an example."
+  (apply #'call-process "xterm" nil nil nil
+	 (append
+	  (term-keys/xterm-args)
 	  (list
 	    "-e" (car command-line-args) "-nw"
 	    "--load" (or load-file-name buffer-file-name)
