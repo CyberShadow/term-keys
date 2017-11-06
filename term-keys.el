@@ -205,6 +205,9 @@ combination should be encoded."
    ;; Ctrl+Tab
    (and (string-equal key "Tab") control)
 
+   ;; Ctrl+BackSpace
+   (and (string-equal key "BackSpace") control)
+
    ;; C-S-x is unrepresentable for letters
    (and (string-match-p "^[a-z]$" key) control shift)
 
