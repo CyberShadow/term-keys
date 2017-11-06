@@ -306,6 +306,24 @@ executable file and used for launching urxvt."
    (mapconcat #'shell-quote-argument (term-keys/urxvt-args) " \\\n\t")
    " \\\n\t\"$@\"\n"))
 
+(defun term-keys/urxvt-xresources ()
+  "Construct urxvt configuration in the form of .Xresources entries.
+
+This function returns, as a string, the .Xresources entries
+necessary to configure urxvt to encode term-keys key
+sequences (as configured by the `term-keys/want-key-p' function).
+
+The returned string is suitable to be added as-is to an
+~/.Xresources file."
+  (apply #'concat
+	 (term-keys/iterate-keys
+	  (lambda (index pair shift control meta)
+	    (format "URxvt.keysym.%s: string:%s%s%s\n"
+		    (term-keys/format-urxvt-key (car pair) shift control meta)
+		    term-keys/prefix
+		    (term-keys/encode-key index shift control meta)
+		    term-keys/suffix)))))
+
 (defun term-keys/urxvt-run-emacs ()
   "Launch Emacs via urxvt enhanced with term-keys.
 
