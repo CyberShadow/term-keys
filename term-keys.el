@@ -234,12 +234,12 @@ received by Emacs running in a terminal) which encodes the
 combination of KEY (the key's index in the `term-keys/mapping'
 table) and SHIFT, CONTROL or META (indicating whether they're
 pressed or not)."
-  (format "%x%s"
-	  (+
-	   (if shift 1 0)
-	   (if control 2 0)
-	   (if meta 4 0))
-	  (term-keys/encode-number key)))
+  (term-keys/encode-number
+   (+
+    (if shift 1 0)
+    (if control 2 0)
+    (if meta 4 0)
+    (* 8 key))))
 
 (defun term-keys/iterate-keys (fun)
   "Call FUN over every enabled key combination.
