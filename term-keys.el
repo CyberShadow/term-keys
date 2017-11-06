@@ -190,7 +190,8 @@ This function controls which key combinations are to be encoded
 and decoded by default using the term-keys protocol extension.
 KEY is the KeySym name as listed in `term-keys/mapping'; SHIFT,
 CONTROL and META are t or nil depending on whether they are
-depressed or not."
+depressed or not.  Returns non-nil if the specified key
+combination should be encoded."
   (or
    ;; https://lists.gnu.org/archive/html/bug-gnu-emacs/2004-03/msg00306.html
    (and (string-equal key "g") control meta)
@@ -225,14 +226,6 @@ Customize this variable to a function or lambda defined by you to
 change which key combinations to encode."
   :type 'function
   :group 'term-keys)
-
-(defun term-keys/want-key-p (key shift control meta)
-  "Return non-nil for keys that should be encoded.
-
-This simply forwards the arguments KEY, SHIFT, CONTROL and META
-to the function configured in `term-keys/want-key-p-func'
-\(`term-keys/want-key-p-def' by default)."
-  (funcall term-keys/want-key-p-func key shift control meta))
 
 
 (defun term-keys/format-key (key shift control meta)
@@ -292,8 +285,8 @@ pressed or not)."
 
 Iterate over all elements of `term-keys/mapping' and
 Shift/Control/Meta combinations, filter the enabled ones using
-`term-keys/want-key-p', and call (FUN INDEX PAIR SHIFT CONTROL
-META).
+`term-keys/want-key-p-func', and call (FUN INDEX PAIR SHIFT
+CONTROL META).
 
 Collect FUN's return values in a list and return it."
   (cl-loop
@@ -310,7 +303,7 @@ Collect FUN's return values in a list and return it."
       for meta in '(nil t)
       if (and
 	  (cdr pair)
-	  (term-keys/want-key-p (car pair) shift control meta))
+	  (funcall term-keys/want-key-p-func (car pair) shift control meta))
       collect (funcall fun index pair shift control meta))))))
 
 
@@ -347,8 +340,7 @@ upcasing letter keys."
 
 This function returns a list of urxvt (rxvt-unicode) command line
 arguments necessary to configure the terminal emulator to encode
-key sequences (as configured by the `term-keys/want-key-p'
-function)."
+key sequences (as configured by `term-keys/want-key-p-func')."
   (apply #'nconc
 	 (term-keys/iterate-keys
 	  (lambda (index pair shift control meta)
@@ -368,8 +360,7 @@ function)."
 
 This function returns, as a string, a shell script which launches
 urxvt (rxvt-unicode) configured to encode term-keys key
-sequences (as configured by the `term-keys/want-key-p'
-function).
+sequences (as configured by `term-keys/want-key-p-func').
 
 The returned string is suitable to be saved as-is in an
 executable file and used for launching urxvt."
@@ -385,7 +376,7 @@ executable file and used for launching urxvt."
 
 This function returns, as a string, the .Xresources entries
 necessary to configure urxvt to encode term-keys key
-sequences (as configured by the `term-keys/want-key-p' function).
+sequences (as configured by `term-keys/want-key-p-func').
 
 The returned string is suitable to be added as-is to an
 ~/.Xresources file."
