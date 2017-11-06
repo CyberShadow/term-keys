@@ -218,30 +218,46 @@ pressed or not)."
 
 (require 'cl-lib)
 
+(defun term-keys/iterate-keys (fun)
+  "Call FUN over every enabled key combination.
+
+Iterate over all elements of `term-keys/mapping' and
+Shift/Control/Meta combinations, filter the enabled ones using
+`term-keys/want-key-p', and call (FUN INDEX PAIR SHIFT CONTROL
+META).
+
+Collect FUN's return values in a list and return it."
+  (cl-loop
+   for pair in term-keys/mapping
+   for index from 0
+   append
+   (cl-loop
+    for shift in '(nil t)
+    append
+    (cl-loop
+     for control in '(nil t)
+     append
+     (cl-loop
+      for meta in '(nil t)
+      if (and
+	  (cdr pair)
+	  (term-keys/want-key-p (car pair) shift control meta))
+      collect (funcall fun index pair shift control meta))))))
+
 ;;;###autoload
 (defun term-keys/init ()
   "Initialize term-keys."
 
-  (cl-loop
-   for pair in term-keys/mapping
-   for num from 0
-   do (cl-loop
-       for shift in '(nil t) do
-       (cl-loop
-	for control in '(nil t) do
-	(cl-loop
-	 for meta in '(nil t)
-	 if (and
-	     (cdr pair)
-	     (term-keys/want-key-p (car pair) shift control meta))
-	 do (define-key
-	      input-decode-map
-	      (concat
-	       term-keys/prefix
-	       (term-keys/encode-key num shift control meta)
-	       term-keys/suffix)
-	      (kbd (term-keys/format-key
-		    (cdr pair) shift control meta))))))))
+  (term-keys/iterate-keys
+   (lambda (index pair shift control meta)
+     (define-key
+       input-decode-map
+       (concat
+	term-keys/prefix
+	(term-keys/encode-key index shift control meta)
+	term-keys/suffix)
+       (kbd (term-keys/format-key
+	     (cdr pair) shift control meta))))))
 
 (defun term-keys/format-urxvt-key (key shift control meta)
   "Format key modifiers in urxvt syntax.
@@ -261,29 +277,18 @@ This function returns a list of urxvt (rxvt-unicode) command line
 arguments necessary to configure the terminal emulator to encode
 key sequences (as configured by the `term-keys/want-key-p'
 function)."
-  (cl-loop
-   for pair in term-keys/mapping
-   for num from 0
-   append
-   (cl-loop
-    for shift in '(nil t)
-    append
-    (cl-loop
-     for control in '(nil t)
-     append
-     (cl-loop
-      for meta in '(nil t)
-      if (and (cdr pair) (term-keys/want-key-p (car pair) shift control meta))
-      append
-      (list
-       (concat
-	"-keysym."
-	(term-keys/format-urxvt-key (car pair) shift control meta))
-       (concat
-	"string:"
-	term-keys/prefix
-	(term-keys/encode-key num shift control meta)
-	term-keys/suffix)))))))
+  (apply #'nconc
+	 (term-keys/iterate-keys
+	  (lambda (index pair shift control meta)
+	    (list
+	     (concat
+	      "-keysym."
+	      (term-keys/format-urxvt-key (car pair) shift control meta))
+	     (concat
+	      "string:"
+	      term-keys/prefix
+	      (term-keys/encode-key index shift control meta)
+	      term-keys/suffix))))))
 
 (defun term-keys/urxvt-script ()
   "Construct urxvt configuration in the form of a shell script.
