@@ -241,7 +241,7 @@ SHIFT, CONTROL or META are correspondingly non-nil."
 
 
 (defun term-keys/encode-number (num)
-  "Efficiently encode integer NUM into a string.
+  "Efficiently encode non-negative integer NUM into a string.
 
 Use only characters that can safely occur on a command line or
 configuration file.  Current implementation uses base-96 (ASCII
