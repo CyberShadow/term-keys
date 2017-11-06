@@ -34,111 +34,133 @@
 
 (require 'cl-lib)
 
+(defgroup term-keys nil
+  "The `term-keys' customization group.
 
-(defvar term-keys/mapping nil
-  "List of keys supported by the term-keys package.
+This package allows lossless keyboard input when using Emacs from
+a terminal emulator.
 
-TODO: Finalize and document structure")
-(setq term-keys/mapping
-      '(("Escape" . "<escape>")
-	("F1" . "<f1>")
-	("F2" . "<f2>")
-	("F3" . "<f3>")
-	("F4" . "<f4>")
-	("F5" . "<f5>")
-	("F6" . "<f6>")
-	("F7" . "<f7>")
-	("F8" . "<f8>")
-	("F9" . "<f9>")
-	("F10" . "<f10>")
-	("F11" . "<f11>")
-	("F12" . "<f12>")
-	("Print" . "<print>")
-	("Scroll_Lock" . "<Scroll_Lock>")
-	("Pause" . "<pause>")
+For more information, please see the accompanying README.md
+file."
+  :group 'convenience)
 
-	("grave" . "`")
-	("1" . "1")
-	("2" . "2")
-	("3" . "3")
-	("4" . "4")
-	("5" . "5")
-	("6" . "6")
-	("7" . "7")
-	("8" . "8")
-	("9" . "9")
-	("0" . "0")
-	("minus" . "-")
-	("equal" . "=")
-	("BackSpace" . "<backspace>")
-	("Tab" . "<tab>")
-	("q" . "q")
-	("w" . "w")
-	("e" . "e")
-	("r" . "r")
-	("t" . "t")
-	("y" . "y")
-	("u" . "u")
-	("i" . "i")
-	("o" . "o")
-	("p" . "p")
-	("bracketleft" . "[")
-	("bracketright" . "]")
-	("backslash" . "\\")
-	("Caps_Lock" . "<Caps_Lock>")
-	("a" . "a")
-	("s" . "s")
-	("d" . "d")
-	("f" . "f")
-	("g" . "g")
-	("h" . "h")
-	("j" . "j")
-	("k" . "k")
-	("l" . "l")
-	("semicolon" . ";")
-	("apostrophe" . "'")
-	("Return" . "<return>")
-	("Shift_L" . nil)
-	("z" . "z")
-	("x" . "x")
-	("c" . "c")
-	("v" . "v")
-	("b" . "b")
-	("n" . "n")
-	("m" . "m")
-	("comma" . ",")
-	("period" . ".")
-	("slash" . "/")
-	("Shift_R" . nil)
-	("Ctrl_L" . nil)
-	("Super_L" . nil)
-	("Alt_L" . nil)
-	("space" . "SPC")
-	("Alt_R" . nil)
-	("Super_R" . nil)
-	("Menu" . "<menu>")
-	("Ctrl_R" . nil)
+(defcustom term-keys/mapping
+  '(("Escape" . "<escape>")
+    ("F1" . "<f1>")
+    ("F2" . "<f2>")
+    ("F3" . "<f3>")
+    ("F4" . "<f4>")
+    ("F5" . "<f5>")
+    ("F6" . "<f6>")
+    ("F7" . "<f7>")
+    ("F8" . "<f8>")
+    ("F9" . "<f9>")
+    ("F10" . "<f10>")
+    ("F11" . "<f11>")
+    ("F12" . "<f12>")
+    ("Print" . "<print>")
+    ("Scroll_Lock" . "<Scroll_Lock>")
+    ("Pause" . "<pause>")
 
-	("Up" . "<up>")
-	("Down" . "<down>")
-	("Left" . "<left>")
-	("Right" . "<right>")
+    ("grave" . "`")
+    ("1" . "1")
+    ("2" . "2")
+    ("3" . "3")
+    ("4" . "4")
+    ("5" . "5")
+    ("6" . "6")
+    ("7" . "7")
+    ("8" . "8")
+    ("9" . "9")
+    ("0" . "0")
+    ("minus" . "-")
+    ("equal" . "=")
+    ("BackSpace" . "<backspace>")
+    ("Tab" . "<tab>")
+    ("q" . "q")
+    ("w" . "w")
+    ("e" . "e")
+    ("r" . "r")
+    ("t" . "t")
+    ("y" . "y")
+    ("u" . "u")
+    ("i" . "i")
+    ("o" . "o")
+    ("p" . "p")
+    ("bracketleft" . "[")
+    ("bracketright" . "]")
+    ("backslash" . "\\")
+    ("Caps_Lock" . "<Caps_Lock>")
+    ("a" . "a")
+    ("s" . "s")
+    ("d" . "d")
+    ("f" . "f")
+    ("g" . "g")
+    ("h" . "h")
+    ("j" . "j")
+    ("k" . "k")
+    ("l" . "l")
+    ("semicolon" . ";")
+    ("apostrophe" . "'")
+    ("Return" . "<return>")
+    ("Shift_L" . nil)
+    ("z" . "z")
+    ("x" . "x")
+    ("c" . "c")
+    ("v" . "v")
+    ("b" . "b")
+    ("n" . "n")
+    ("m" . "m")
+    ("comma" . ",")
+    ("period" . ".")
+    ("slash" . "/")
+    ("Shift_R" . nil)
+    ("Ctrl_L" . nil)
+    ("Super_L" . nil)
+    ("Alt_L" . nil)
+    ("space" . "SPC")
+    ("Alt_R" . nil)
+    ("Super_R" . nil)
+    ("Menu" . "<menu>")
+    ("Ctrl_R" . nil)
 
-	("Insert" . "<insert>")
-	("Delete" . "<delete>")
-	("Home" . "<home>")
-	("End" . "<end>")
-	("Prior" . "<prior>")
-	("Next" . "<next>")
+    ("Up" . "<up>")
+    ("Down" . "<down>")
+    ("Left" . "<left>")
+    ("Right" . "<right>")
 
-	;; Add new entries at the end of the list, to avoid disrupting
-	;; existing configurations.
+    ("Insert" . "<insert>")
+    ("Delete" . "<delete>")
+    ("Home" . "<home>")
+    ("End" . "<end>")
+    ("Prior" . "<prior>")
+    ("Next" . "<next>")
 
-	;; TODO: numpad
-	))
+    ;; Add new entries at the end of the list, to avoid disrupting
+    ;; existing configurations.
+
+    ;; TODO: numpad
+    )
+  "List of keys supported by the `term-keys' package.
+
+TODO: Finalize and document structure"
+  :type '(repeatn
+	  (cons
+	   :tag "Key mapping"
+	   (string
+	    :tag "X11 KeySym")
+	   (choice
+	    :tag "Emacs key"
+	    (const
+	     :tag "No corresponding Emacs key"
+	     nil)
+	    (string
+	     :tag "Emacs key name"))))
+  :group 'term-keys)
 
 
-(defvar term-keys/prefix nil
+
+(defcustom term-keys/prefix "\033\037"
   "Key sequence prefix.
 
 Indicates the byte string to be sent before a term-keys key code.
@@ -148,27 +170,27 @@ The default value is \\033\\037 (0x1B 0x1F, or ^[^_).
 The prefix, or any starting substring of it, or any sequence
 beginning with it, should not be already bound to an action in
 Emacs.  E.g. with the default, neither ^[, ^[^_, or ^[^_abc
-should by themselves be bound to an Emacs action.")
-(setq term-keys/prefix "\033\037")
+should by themselves be bound to an Emacs action."
+  :group 'term-keys)
 
 
-(defvar term-keys/suffix nil
+(defcustom term-keys/suffix "\037"
   "Key sequence suffix.
 
 Indicates the end of the data encoding the pressed key
 combination.  Can be any character which isn't used in the
-`term-keys/encode-number' encoding scheme.")
-(setq term-keys/suffix "\037")
+`term-keys/encode-number' encoding scheme."
+  :group 'term-keys)
 
 
-(defun term-keys/want-key-p (key shift control meta)
-  "Return non-nil for keys that should be encoded.
+(defun term-keys/want-key-p-def (key shift control meta)
+  "Default implementation for `term-keys/want-key-p-func'.
 
 This function controls which key combinations are to be encoded
-and decoded using the term-keys protocol extension.  KEY is the
-KeySym name as listed in `term-keys/mapping'; SHIFT, CONTROL and
-META are t or nil depending on whether they are depressed or
-not."
+and decoded by default using the term-keys protocol extension.
+KEY is the KeySym name as listed in `term-keys/mapping'; SHIFT,
+CONTROL and META are t or nil depending on whether they are
+depressed or not."
   (or
    ;; https://lists.gnu.org/archive/html/bug-gnu-emacs/2004-03/msg00306.html
    (and (string-equal key "g") control meta)
@@ -191,6 +213,26 @@ not."
    ;; Menu (Apps) key
    (string-equal key "Menu")
    ))
+
+(defcustom term-keys/want-key-p-func 'term-keys/want-key-p-def
+  "Function for deciding whether to encode a key combination.
+
+This should be set to a function with the same signature and
+semantics as `term-keys/want-key-p-def'.  Look at that function's
+documentation for more details.
+
+Customize this variable to a function or lambda defined by you to
+change which key combinations to encode."
+  :type 'function
+  :group 'term-keys)
+
+(defun term-keys/want-key-p (key shift control meta)
+  "Return non-nil for keys that should be encoded.
+
+This simply forwards the arguments KEY, SHIFT, CONTROL and META
+to the function configured in `term-keys/want-key-p-func'
+\(`term-keys/want-key-p-def' by default)."
+  (funcall term-keys/want-key-p-func key shift control meta))
 
 
 (defun term-keys/format-key (key shift control meta)
