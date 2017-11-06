@@ -174,6 +174,9 @@ not."
    ;; Navigation keys and Control
    (and (member key '("Up" "Down" "Left" "Right" "Home" "End" "Prior" "Next")) control (or shift meta))
 
+   ;; S-PgUp/PgDn - usually used for scrolling the terminal, but not useful in Emacs
+   (and (member key '("Prior" "Next")) shift)
+
    ;; Ctrl+Tab
    (and (string-equal key "Tab") control)
 
