@@ -219,26 +219,26 @@ pressed or not)."
 (defun term-keys/init ()
   "Initialize term-keys."
 
-  (let ((num 0)
-  	(keys term-keys/mapping))
-    (while keys
-      (let ((pair (car keys)))
+  (cl-loop
+   for pair in term-keys/mapping
+   for num from 0
+   do (cl-loop
+       for shift in '(nil t) do
+       (cl-loop
+	for control in '(nil t) do
 	(cl-loop
-	 for shift in '(nil t) do
-	 (cl-loop
-	  for control in '(nil t) do
-	  (cl-loop
-	   for meta in '(nil t)
-	   if (and (cdr pair) (term-keys/want-key-p (car pair) shift control meta))
-	   do (define-key
-		input-decode-map
-		(concat
-		 term-keys/prefix
-		 (term-keys/encode-key num shift control meta)
-		 term-keys/suffix)
-		(kbd (term-keys/format-key (cdr pair) shift control meta)))))))
-      (setq num (1+ num))
-      (setq keys (cdr keys)))))
+	 for meta in '(nil t)
+	 if (and
+	     (cdr pair)
+	     (term-keys/want-key-p (car pair) shift control meta))
+	 do (define-key
+	      input-decode-map
+	      (concat
+	       term-keys/prefix
+	       (term-keys/encode-key num shift control meta)
+	       term-keys/suffix)
+	      (kbd (term-keys/format-key
+		    (cdr pair) shift control meta))))))))
 
 (defun term-keys/format-urxvt-key (key shift control meta)
   "Format key modifiers in urxvt syntax.
@@ -258,32 +258,29 @@ This function returns a list of urxvt (rxvt-unicode) command line
 arguments necessary to configure the terminal emulator to encode
 key sequences (as configured by the `term-keys/want-key-p'
 function)."
-  (let ((num 0)
-	(keys term-keys/mapping)
-	(args))
-    (while keys
-      (let ((pair (car keys)))
-	(cl-loop
-	 for shift in '(nil t) do
-	 (cl-loop
-	  for control in '(nil t) do
-	  (cl-loop
-	   for meta in '(nil t)
-	   if (and (cdr pair) (term-keys/want-key-p (car pair) shift control meta))
-	   do (setq args
-		    (apply #'list
-			   (concat
-			    "-keysym."
-			    (term-keys/format-urxvt-key (car pair) shift control meta))
-			   (concat
-			    "string:"
-			    term-keys/prefix
-			    (term-keys/encode-key num shift control meta)
-			    term-keys/suffix)
-			   args))))))
-      (setq num (1+ num))
-      (setq keys (cdr keys)))
-    args))
+  (cl-loop
+   for pair in term-keys/mapping
+   for num from 0
+   append
+   (cl-loop
+    for shift in '(nil t)
+    append
+    (cl-loop
+     for control in '(nil t)
+     append
+     (cl-loop
+      for meta in '(nil t)
+      if (and (cdr pair) (term-keys/want-key-p (car pair) shift control meta))
+      append
+      (list
+       (concat
+	"-keysym."
+	(term-keys/format-urxvt-key (car pair) shift control meta))
+       (concat
+	"string:"
+	term-keys/prefix
+	(term-keys/encode-key num shift control meta)
+	term-keys/suffix)))))))
 
 (defun term-keys/urxvt-script ()
   "Construct urxvt configuration in the form of a shell script.
