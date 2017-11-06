@@ -309,8 +309,7 @@ Collect FUN's return values in a list and return it."
 
 ;;;###autoload
 (defun term-keys/init ()
-  "Initialize term-keys."
-
+  "Set up configured key sequences for the current terminal."
   (term-keys/iterate-keys
    (lambda (index pair shift control meta)
      (define-key
@@ -321,6 +320,18 @@ Collect FUN's return values in a list and return it."
 	term-keys/suffix)
        (kbd (term-keys/format-key
 	     (cdr pair) shift control meta))))))
+
+
+;;;###autoload
+(define-minor-mode term-keys-mode
+  "`term-keys' global minor mode.
+
+When enabled, automatically set up configured keys for TTY
+terminals."
+  :global t
+  (if term-keys-mode
+      (add-hook 'tty-setup-hook 'term-keys/init)
+    (remove-hook 'tty-setup-hook 'term-keys/init)))
 
 
 (defun term-keys/format-urxvt-key (key shift control meta)
