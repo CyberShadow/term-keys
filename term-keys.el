@@ -183,40 +183,51 @@ combination.  Can be any character which isn't used in the
   :group 'term-keys)
 
 
-(defun term-keys/want-key-p-def (key shift control meta)
+(defun term-keys/want-key-p-def (key shift control meta super hyper alt)
   "Default implementation for `term-keys/want-key-p-func'.
 
 This function controls which key combinations are to be encoded
 and decoded by default using the term-keys protocol extension.
-KEY is the KeySym name as listed in `term-keys/mapping'; SHIFT,
-CONTROL and META are t or nil depending on whether they are
-depressed or not.  Returns non-nil if the specified key
-combination should be encoded."
-  (or
-   ;; https://lists.gnu.org/archive/html/bug-gnu-emacs/2004-03/msg00306.html
-   (and (string-equal key "g") control meta)
+KEY is the KeySym name as listed in `term-keys/mapping'; the
+modifiers SHIFT / CONTROL / META / SUPER / HYPER / ALT are t or
+nil depending on whether they are depressed or not.  Returns
+non-nil if the specified key combination should be encoded.
 
-   ;; Navigation keys and Control
-   (and (member key '("Up" "Down" "Left" "Right" "Home" "End" "Prior" "Next")) control (or shift meta))
+Note that the ALT modifier rarely actually corresponds to the Alt
+key on PC keyboards; the META modifier will usually be used
+instead."
+  (and
 
-   ;; S-PgUp/PgDn - usually used for scrolling the terminal, but not useful in Emacs
-   (and (member key '("Prior" "Next")) shift)
+   ;; We don't care about Super/Hyper/Alt modifiers
+   (not super)
+   (not hyper)
+   (not alt)
 
-   ;; Ctrl+Tab
-   (and (string-equal key "Tab") control)
+   (or
+    ;; https://lists.gnu.org/archive/html/bug-gnu-emacs/2004-03/msg00306.html
+    (and (string-equal key "g") control meta)
 
-   ;; Ctrl+BackSpace
-   (and (string-equal key "BackSpace") control)
+    ;; Navigation keys and Control
+    (and (member key '("Up" "Down" "Left" "Right" "Home" "End" "Prior" "Next")) control (or shift meta))
 
-   ;; C-S-x is unrepresentable for letters
-   (and (string-match-p "^[a-z]$" key) control shift)
+    ;; S-PgUp/PgDn - usually used for scrolling the terminal, but not useful in Emacs
+    (and (member key '("Prior" "Next")) shift)
 
-   ;; C-x is unrepresentable for digits
-   (and (string-match-p "^[0-9]$" key) control)
+    ;; Ctrl+Tab
+    (and (string-equal key "Tab") control)
 
-   ;; Menu (Apps) key
-   (string-equal key "Menu")
-   ))
+    ;; Ctrl+BackSpace
+    (and (string-equal key "BackSpace") control)
+
+    ;; C-S-x is unrepresentable for letters
+    (and (string-match-p "^[a-z]$" key) control shift)
+
+    ;; C-x is unrepresentable for digits
+    (and (string-match-p "^[0-9]$" key) control)
+
+    ;; Menu (Apps) key
+    (string-equal key "Menu")
+    )))
 
 (defcustom term-keys/want-key-p-func 'term-keys/want-key-p-def
   "Function for deciding whether to encode a key combination.
@@ -231,15 +242,19 @@ change which key combinations to encode."
   :group 'term-keys)
 
 
-(defun term-keys/format-key (key shift control meta)
+(defun term-keys/format-key (key shift control meta super hyper alt)
   "Format key modifiers in Emacs/urxvt syntax.
 
-Returns KEY prepended with S-, C- or M- depending on whether
-SHIFT, CONTROL or META are correspondingly non-nil."
+Returns KEY prepended with S-, C-, M-, s-, H-, or A- depending on
+whether SHIFT, CONTROL, META, SUPER, HYPER, or ALT are
+correspondingly non-nil."
   (concat
    (if shift "S-" "")
    (if control "C-" "")
    (if meta "M-" "")
+   (if super "s-" "")
+   (if hyper "H-" "")
+   (if alt "A-" "")
    key))
 
 
@@ -267,29 +282,32 @@ configuration file.  Current implementation uses base-96 (ASCII
 			    (term-keys/encode-number n)) n)))
 
 
-(defun term-keys/encode-key (key shift control meta)
+(defun term-keys/encode-key (key shift control meta super hyper alt)
   "Encode a key combination to term-keys' protocol.
 
 Returns a string ready to be sent by a terminal emulator (or
 received by Emacs running in a terminal) which encodes the
 combination of KEY (the key's index in the `term-keys/mapping'
-table) and SHIFT, CONTROL or META (indicating whether they're
-pressed or not)."
+table) and SHIFT, CONTROL, META, SUPER, HYPER, or ALT (indicating
+whether they're pressed or not)."
   (term-keys/encode-number
    (+
     (if shift 1 0)
     (if control 2 0)
     (if meta 4 0)
-    (* 8 key))))
+    (if super 8 0)
+    (if hyper 16 0)
+    (if alt 32 0)
+    (* 64 key))))
 
 
 (defun term-keys/iterate-keys (fun)
   "Call FUN over every enabled key combination.
 
 Iterate over all elements of `term-keys/mapping' and
-Shift/Control/Meta combinations, filter the enabled ones using
+modifier key combinations, filter the enabled ones using
 `term-keys/want-key-p-func', and call (FUN INDEX PAIR SHIFT
-CONTROL META).
+CONTROL META SUPER HYPER ALT).
 
 Collect FUN's return values in a list and return it."
   (cl-loop
@@ -297,32 +315,34 @@ Collect FUN's return values in a list and return it."
    for index from 0
    append
    (cl-loop
-    for shift in '(nil t)
-    append
-    (cl-loop
-     for control in '(nil t)
-     append
-     (cl-loop
-      for meta in '(nil t)
-      if (and
-	  (cdr pair)
-	  (funcall term-keys/want-key-p-func (car pair) shift control meta))
-      collect (funcall fun index pair shift control meta))))))
+    for mods from 0 to 63
+    for shift   = (not (zerop (logand mods  1)))
+    for control = (not (zerop (logand mods  2)))
+    for meta    = (not (zerop (logand mods  4)))
+    for super   = (not (zerop (logand mods  8)))
+    for hyper   = (not (zerop (logand mods 16)))
+    for alt     = (not (zerop (logand mods 32)))
+    if (and
+	(cdr pair)
+	(funcall term-keys/want-key-p-func (car pair)
+		 shift control meta super hyper alt))
+    collect (funcall fun index pair
+		     shift control meta super hyper alt))))
 
 
 ;;;###autoload
 (defun term-keys/init ()
   "Set up configured key sequences for the current terminal."
   (term-keys/iterate-keys
-   (lambda (index pair shift control meta)
+   (lambda (index pair shift control meta super hyper alt)
      (define-key
        input-decode-map
        (concat
 	term-keys/prefix
-	(term-keys/encode-key index shift control meta)
+	(term-keys/encode-key index shift control meta super hyper alt)
 	term-keys/suffix)
        (kbd (term-keys/format-key
-	     (cdr pair) shift control meta))))))
+	     (cdr pair) shift control meta super hyper alt))))))
 
 
 ;;;###autoload
@@ -341,16 +361,16 @@ well."
     (remove-hook 'tty-setup-hook 'term-keys/init)))
 
 
-(defun term-keys/format-urxvt-key (key shift control meta)
+(defun term-keys/format-urxvt-key (key shift control meta super hyper alt)
   "Format key modifiers in urxvt syntax.
 
-Returns KEY prepended with S-, C- or M- depending on whether
-SHIFT, CONTROL or META are correspondingly non-nil, additionally
-upcasing letter keys."
+Returns KEY prepended with S-, C-, M-, s-, H-, or A- depending on
+whether SHIFT, CONTROL, META, SUPER, HYPER, or ALT are
+correspondingly non-nil, additionally upcasing letter keys."
   (if (and shift (string-match-p "^[a-z]$" key))
       ;; Upcase letter keys
-      (term-keys/format-key (upcase key) nil control meta)
-    (term-keys/format-key key shift control meta)))
+      (term-keys/format-key (upcase key) nil control meta super hyper alt)
+    (term-keys/format-key key shift control meta super hyper alt)))
 
 
 (defun term-keys/urxvt-args ()
@@ -361,15 +381,15 @@ arguments necessary to configure the terminal emulator to encode
 key sequences (as configured by `term-keys/want-key-p-func')."
   (apply #'nconc
 	 (term-keys/iterate-keys
-	  (lambda (index pair shift control meta)
+	  (lambda (index pair shift control meta super hyper alt)
 	    (list
 	     (concat
 	      "-keysym."
-	      (term-keys/format-urxvt-key (car pair) shift control meta))
+	      (term-keys/format-urxvt-key (car pair) shift control meta super hyper alt))
 	     (concat
 	      "string:"
 	      term-keys/prefix
-	      (term-keys/encode-key index shift control meta)
+	      (term-keys/encode-key index shift control meta super hyper alt)
 	      term-keys/suffix))))))
 
 
@@ -400,11 +420,11 @@ The returned string is suitable to be added as-is to an
 ~/.Xresources file."
   (apply #'concat
 	 (term-keys/iterate-keys
-	  (lambda (index pair shift control meta)
+	  (lambda (index pair shift control meta super hyper alt)
 	    (format "URxvt.keysym.%s: string:%s%s%s\n"
-		    (term-keys/format-urxvt-key (car pair) shift control meta)
+		    (term-keys/format-urxvt-key (car pair) shift control meta super hyper alt)
 		    term-keys/prefix
-		    (term-keys/encode-key index shift control meta)
+		    (term-keys/encode-key index shift control meta super hyper alt)
 		    term-keys/suffix)))))
 
 
