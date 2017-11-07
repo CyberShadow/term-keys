@@ -45,96 +45,96 @@ file."
   :group 'convenience)
 
 (defcustom term-keys/mapping
-  '(["<escape>"		"Escape"	1	]
-    ["<f1>"		"F1"		59	]
-    ["<f2>"		"F2"		60	]
-    ["<f3>"		"F3"		61	]
-    ["<f4>"		"F4"		62	]
-    ["<f5>"		"F5"		63	]
-    ["<f6>"		"F6"		64	]
-    ["<f7>"		"F7"		65	]
-    ["<f8>"		"F8"		66	]
-    ["<f9>"		"F9"		67	]
-    ["<f10>"		"F10"		68	]
-    ["<f11>"		"F11"		87	]
-    ["<f12>"		"F12"		88	]
-    ["<print>"		"Print"		99	]
-    ["<Scroll_Lock>"	"Scroll_Lock"	70	]
-    ["<pause>"		"Pause"		119	]
+  '(["<escape>"		"Escape"	1	"Esc"		]
+    ["<f1>"		"F1"		59	"F1"		]
+    ["<f2>"		"F2"		60	"F2"		]
+    ["<f3>"		"F3"		61	"F3"		]
+    ["<f4>"		"F4"		62	"F4"		]
+    ["<f5>"		"F5"		63	"F5"		]
+    ["<f6>"		"F6"		64	"F6"		]
+    ["<f7>"		"F7"		65	"F7"		]
+    ["<f8>"		"F8"		66	"F8"		]
+    ["<f9>"		"F9"		67	"F9"		]
+    ["<f10>"		"F10"		68	"F10"		]
+    ["<f11>"		"F11"		87	"F11"		]
+    ["<f12>"		"F12"		88	"F12"		]
+    ["<print>"		"Print"		99	"Print"		]
+    ["<Scroll_Lock>"	"Scroll_Lock"	70	"ScrollLock"	]
+    ["<pause>"		"Pause"		119	"Pause"		]
 
-    ["`"		"grave"		43	]
-    ["1"		"1"		2	]
-    ["2"		"2"		3	]
-    ["3"		"3"		4	]
-    ["4"		"4"		5	]
-    ["5"		"5"		6	]
-    ["6"		"6"		7	]
-    ["7"		"7"		8	]
-    ["8"		"8"		9	]
-    ["9"		"9"		10	]
-    ["0"		"0"		11	]
-    ["-"		"minus"		12	]
-    ["="		"equal"		13	]
-    ["<backspace>"	"BackSpace"	14	]
-    ["<tab>"		"Tab"		15	]
-    ["q"		"q"		16	]
-    ["w"		"w"		17	]
-    ["e"		"e"		18	]
-    ["r"		"r"		19	]
-    ["t"		"t"		20	]
-    ["y"		"y"		21	]
-    ["u"		"u"		22	]
-    ["i"		"i"		23	]
-    ["o"		"o"		24	]
-    ["p"		"p"		25	]
-    ["["		"bracketleft"	26	]
-    ["]"		"bracketright"	27	]
-    ["<return>"		"Return"	28	]
-    ["<Caps_Lock>"	"Caps_Lock"	58	]
-    ["a"		"a"		30	]
-    ["s"		"s"		31	]
-    ["d"		"d"		32	]
-    ["f"		"f"		33	]
-    ["g"		"g"		34	]
-    ["h"		"h"		35	]
-    ["j"		"j"		36	]
-    ["k"		"k"		37	]
-    ["l"		"l"		38	]
-    [";"		"semicolon"	39	]
-    ["'"		"apostrophe"	40	]
-    [nil		"Shift_L"	42	]
-    ["\\"		"backslash"	43	]
-    ["z"		"z"		44	]
-    ["x"		"x"		45	]
-    ["c"		"c"		46	]
-    ["v"		"v"		47	]
-    ["b"		"b"		48	]
-    ["n"		"n"		49	]
-    ["m"		"m"		50	]
-    [","		"comma"		51	]
-    ["."		"period"	52	]
-    ["/"		"slash"		53	]
-    [nil		"Shift_R"	54	]
-    [nil		"Ctrl_L"	29	]
-    [nil		"Super_L"	125	]
-    [nil		"Alt_L"		56	]
-    ["SPC"		"space"		57	]
-    [nil		"Alt_R"		100	]
-    [nil		"Super_R"	126	]
-    ["<menu>"		"Menu"		127	]
-    [nil		"Ctrl_R"	97	]
+    ["`"		"grave"		43	"`"		]
+    ["1"		"1"		2	"1"		]
+    ["2"		"2"		3	"2"		]
+    ["3"		"3"		4	"3"		]
+    ["4"		"4"		5	"4"		]
+    ["5"		"5"		6	"5"		]
+    ["6"		"6"		7	"6"		]
+    ["7"		"7"		8	"7"		]
+    ["8"		"8"		9	"8"		]
+    ["9"		"9"		10	"9"		]
+    ["0"		"0"		11	"0"		]
+    ["-"		"minus"		12	"-"		]
+    ["="		"equal"		13	"="		]
+    ["<backspace>"	"BackSpace"	14	"Backspace"	]
+    ["<tab>"		"Tab"		15	"Tab"		]
+    ["q"		"q"		16	"Q"		]
+    ["w"		"w"		17	"W"		]
+    ["e"		"e"		18	"E"		]
+    ["r"		"r"		19	"R"		]
+    ["t"		"t"		20	"T"		]
+    ["y"		"y"		21	"Y"		]
+    ["u"		"u"		22	"U"		]
+    ["i"		"i"		23	"I"		]
+    ["o"		"o"		24	"O"		]
+    ["p"		"p"		25	"P"		]
+    ["["		"bracketleft"	26	"["		]
+    ["]"		"bracketright"	27	"]"		]
+    ["<return>"		"Return"	28	"Return"	]
+    ["<Caps_Lock>"	"Caps_Lock"	58	"CapsLock"	]
+    ["a"		"a"		30	"A"		]
+    ["s"		"s"		31	"S"		]
+    ["d"		"d"		32	"D"		]
+    ["f"		"f"		33	"F"		]
+    ["g"		"g"		34	"G"		]
+    ["h"		"h"		35	"H"		]
+    ["j"		"j"		36	"J"		]
+    ["k"		"k"		37	"K"		]
+    ["l"		"l"		38	"L"		]
+    [";"		"semicolon"	39	";"		]
+    ["'"		"apostrophe"	40	"'"		]
+    [nil		"Shift_L"	42	"Shift"		]
+    ["\\"		"backslash"	43	"\\"		]
+    ["z"		"z"		44	"Z"		]
+    ["x"		"x"		45	"X"		]
+    ["c"		"c"		46	"C"		]
+    ["v"		"v"		47	"V"		]
+    ["b"		"b"		48	"B"		]
+    ["n"		"n"		49	"N"		]
+    ["m"		"m"		50	"M"		]
+    [","		"comma"		51	","		]
+    ["."		"period"	52	"."		]
+    ["/"		"slash"		53	"/"		]
+    [nil		"Shift_R"	54	"Shift"		]
+    [nil		"Ctrl_L"	29	"Ctrl"		]
+    [nil		"Super_L"	125	"Meta"		]
+    [nil		"Alt_L"		56	"Alt"		]
+    ["SPC"		"space"		57	"Space"		]
+    [nil		"Alt_R"		100	"Alt"		]
+    [nil		"Super_R"	126	"Meta"		]
+    ["<menu>"		"Menu"		127	"Menu"		]
+    [nil		"Ctrl_R"	97	"Ctrl"		]
 
-    ["<up>"		"Up"		103	]
-    ["<down>"		"Down"		108	]
-    ["<left>"		"Left"		105	]
-    ["<right>"		"Right"		106	]
+    ["<up>"		"Up"		103	"Up"		]
+    ["<down>"		"Down"		108	"Down"		]
+    ["<left>"		"Left"		105	"Left"		]
+    ["<right>"		"Right"		106	"Right"		]
 
-    ["<insert>"		"Insert"	110	]
-    ["<delete>"		"Delete"	111	]
-    ["<home>"		"Home"		102	]
-    ["<end>"		"End"		107	]
-    ["<prior>"		"Prior"		104	]
-    ["<next>"		"Next"		109	]
+    ["<insert>"		"Insert"	110	"Ins"		]
+    ["<delete>"		"Delete"	111	"Del"		]
+    ["<home>"		"Home"		102	"Home"		]
+    ["<end>"		"End"		107	"End"		]
+    ["<prior>"		"Prior"		104	"PgUp"		]
+    ["<next>"		"Next"		109	"PgDown"	]
 
     ;; Add new entries at the end of the list, to avoid disrupting
     ;; existing configurations.
@@ -143,7 +143,7 @@ file."
     )
   "List of keys supported by the `term-keys' package.
 
-Each item in the list is a 3-element vector:
+Each item in the list is a 4-element vector:
 
 The first element is the Emacs key name, as it occurs in
 `describe-key' or `kbd'.  nil can be used to indicate keys which
@@ -156,7 +156,12 @@ XKeysymToString.  Used for urxvt/xterm configuration.
 
 The third element is the keynumber (keycode) from the Linux TTY.
 You can obtain a key's keynumber by running the 'showkey' program
-in a TTY."
+in a TTY.
+
+The fourth element is the Qt key name, as returned by
+QKeySequence::toString and accepted by QKeySequence::fromString.
+An easy way to obtain their name is using any KDE application's
+\"Configure Shortcuts\" dialog."
   :type '(repeat
 	  (vector
 	   :tag "Key mapping"
@@ -170,9 +175,10 @@ in a TTY."
 	   (string
 	    :tag "X11 KeySym")
 	   (integer
-	    :tag "Linux TTY keynumber")))
+	    :tag "Linux TTY keynumber")
+	   (string
+	    :tag "Qt key name")))
   :group 'term-keys)
-
 
 
 (defcustom term-keys/prefix "\033\037"
@@ -567,6 +573,7 @@ This function is used for testing and as an example."
 
 ;; Linux TTY
 
+
 (define-widget 'term-keys/linux-modifier 'lazy
   "Choice for Linux modifiers for keymap files."
   :type '(choice (const "Shift")
@@ -671,6 +678,84 @@ file and loaded by the loadkeys program."
 				nil)
 			       ""))
 		    (setq fkey (1+ fkey))))))))))
+
+
+;; Konsole
+
+
+(define-widget 'term-keys/konsole-modifier 'lazy
+  "Choice for Konsole key binding modifiers and state flags."
+  :type '(choice (const "Shift")
+		 (const "Ctrl")
+		 (const "Alt")
+		 (const "Meta")
+		 (const "KeyPad")
+		 (const "AppScreen")
+		 (const "AppCursorKeys")
+		 (const "NewLine")
+		 (const "Ansi")
+		 (const "AnyModifier")
+		 (const "AppKeypad")
+		 (const :tag "(none)" nil)))
+
+(defcustom term-keys/konsole-modifier-map ["Shift" "Ctrl" "Alt" "Meta" nil nil]
+  "Modifier keys for Konsole key bindings.
+
+This should be a vector of 6 elements, with each element being a
+string indicating the name of the Konsole modifier or state flag
+corresponding to the Emacs modifiers Shift, Control, Meta, Super,
+Hyper and Alt respectively, as they should appear in generated
+Konsole .keytab files.  nil indicates that there is no mapping
+for this modifier."
+  :type '(vector
+	  (term-keys/konsole-modifier :tag "Shift")
+	  (term-keys/konsole-modifier :tag "Control")
+	  (term-keys/konsole-modifier :tag "Meta")
+	  (term-keys/konsole-modifier :tag "Super")
+	  (term-keys/konsole-modifier :tag "Hyper")
+	  (term-keys/konsole-modifier :tag "Alt"))
+  :group 'term-keys)
+
+
+(defun term-keys/konsole-keytab ()
+  "Construct Konsole key binding configuration as .keytab file syntax.
+
+This function returns, as a string, a Konsole keytab which can be
+used to configure Konsole to encode term-keys key sequences (as
+configured by `term-keys/want-key-p-func').
+
+The returned string is suitable to be pasted as-is to the end of
+an existing Konsole .keytab file."
+  (apply #'concat
+	 (term-keys/iterate-keys
+	  (lambda (index key shift control meta super hyper alt)
+	    (let* ((mods (vector shift control meta super hyper alt)))
+
+	      ;; Skip key combinations with unrepresentable modifiers
+	      (unless (cl-reduce (lambda (x y) (or x y)) ; any
+				 (mapcar (lambda (n) ; active modifier mapped to nil
+					   (and (elt mods n)
+						(not (elt term-keys/konsole-modifier-map n))))
+					 (number-sequence 0 (1- (length mods))))) ; 0..5
+		(format "key %s%s : \"%s\"\n"
+			(elt key 3) ; key name
+			(mapconcat
+			 (lambda (n)
+			   (if (elt term-keys/konsole-modifier-map n)
+			       (concat
+				(if (elt mods n) "+" "-")
+				(elt term-keys/konsole-modifier-map n))
+			     ""))
+			 (number-sequence 0 (1- (length mods)))
+			 "")
+			(mapconcat  ; hex-escaped sequence
+			 (lambda (x) (format "\\x%02X" x))
+			 (append
+			  term-keys/prefix
+			  (term-keys/encode-key index shift control meta super hyper alt)
+			  term-keys/suffix
+			  nil)
+			 ""))))))))
 
 
 (provide 'term-keys)
