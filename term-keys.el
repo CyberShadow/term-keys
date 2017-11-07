@@ -45,96 +45,96 @@ file."
   :group 'convenience)
 
 (defcustom term-keys/mapping
-  '(("Escape" . "<escape>")
-    ("F1" . "<f1>")
-    ("F2" . "<f2>")
-    ("F3" . "<f3>")
-    ("F4" . "<f4>")
-    ("F5" . "<f5>")
-    ("F6" . "<f6>")
-    ("F7" . "<f7>")
-    ("F8" . "<f8>")
-    ("F9" . "<f9>")
-    ("F10" . "<f10>")
-    ("F11" . "<f11>")
-    ("F12" . "<f12>")
-    ("Print" . "<print>")
-    ("Scroll_Lock" . "<Scroll_Lock>")
-    ("Pause" . "<pause>")
+  '(["<escape>"		"Escape"	]
+    ["<f1>"		"F1"		]
+    ["<f2>"		"F2"		]
+    ["<f3>"		"F3"		]
+    ["<f4>"		"F4"		]
+    ["<f5>"		"F5"		]
+    ["<f6>"		"F6"		]
+    ["<f7>"		"F7"		]
+    ["<f8>"		"F8"		]
+    ["<f9>"		"F9"		]
+    ["<f10>"		"F10"		]
+    ["<f11>"		"F11"		]
+    ["<f12>"		"F12"		]
+    ["<print>"		"Print"		]
+    ["<Scroll_Lock>"	"Scroll_Lock"	]
+    ["<pause>"		"Pause"		]
 
-    ("grave" . "`")
-    ("1" . "1")
-    ("2" . "2")
-    ("3" . "3")
-    ("4" . "4")
-    ("5" . "5")
-    ("6" . "6")
-    ("7" . "7")
-    ("8" . "8")
-    ("9" . "9")
-    ("0" . "0")
-    ("minus" . "-")
-    ("equal" . "=")
-    ("BackSpace" . "<backspace>")
-    ("Tab" . "<tab>")
-    ("q" . "q")
-    ("w" . "w")
-    ("e" . "e")
-    ("r" . "r")
-    ("t" . "t")
-    ("y" . "y")
-    ("u" . "u")
-    ("i" . "i")
-    ("o" . "o")
-    ("p" . "p")
-    ("bracketleft" . "[")
-    ("bracketright" . "]")
-    ("backslash" . "\\")
-    ("Caps_Lock" . "<Caps_Lock>")
-    ("a" . "a")
-    ("s" . "s")
-    ("d" . "d")
-    ("f" . "f")
-    ("g" . "g")
-    ("h" . "h")
-    ("j" . "j")
-    ("k" . "k")
-    ("l" . "l")
-    ("semicolon" . ";")
-    ("apostrophe" . "'")
-    ("Return" . "<return>")
-    ("Shift_L" . nil)
-    ("z" . "z")
-    ("x" . "x")
-    ("c" . "c")
-    ("v" . "v")
-    ("b" . "b")
-    ("n" . "n")
-    ("m" . "m")
-    ("comma" . ",")
-    ("period" . ".")
-    ("slash" . "/")
-    ("Shift_R" . nil)
-    ("Ctrl_L" . nil)
-    ("Super_L" . nil)
-    ("Alt_L" . nil)
-    ("space" . "SPC")
-    ("Alt_R" . nil)
-    ("Super_R" . nil)
-    ("Menu" . "<menu>")
-    ("Ctrl_R" . nil)
+    ["`"		"grave"		]
+    ["1"		"1"		]
+    ["2"		"2"		]
+    ["3"		"3"		]
+    ["4"		"4"		]
+    ["5"		"5"		]
+    ["6"		"6"		]
+    ["7"		"7"		]
+    ["8"		"8"		]
+    ["9"		"9"		]
+    ["0"		"0"		]
+    ["-"		"minus"		]
+    ["="		"equal"		]
+    ["<backspace>"	"BackSpace"	]
+    ["<tab>"		"Tab"		]
+    ["q"		"q"		]
+    ["w"		"w"		]
+    ["e"		"e"		]
+    ["r"		"r"		]
+    ["t"		"t"		]
+    ["y"		"y"		]
+    ["u"		"u"		]
+    ["i"		"i"		]
+    ["o"		"o"		]
+    ["p"		"p"		]
+    ["["		"bracketleft"	]
+    ["]"		"bracketright"	]
+    ["\\"		"backslash"	]
+    ["<Caps_Lock>"	"Caps_Lock"	]
+    ["a"		"a"		]
+    ["s"		"s"		]
+    ["d"		"d"		]
+    ["f"		"f"		]
+    ["g"		"g"		]
+    ["h"		"h"		]
+    ["j"		"j"		]
+    ["k"		"k"		]
+    ["l"		"l"		]
+    [";"		"semicolon"	]
+    ["'"		"apostrophe"	]
+    ["<return>"		"Return"	]
+    [nil		"Shift_L"	]
+    ["z"		"z"		]
+    ["x"		"x"		]
+    ["c"		"c"		]
+    ["v"		"v"		]
+    ["b"		"b"		]
+    ["n"		"n"		]
+    ["m"		"m"		]
+    [","		"comma"		]
+    ["."		"period"	]
+    ["/"		"slash"		]
+    [nil		"Shift_R"	]
+    [nil		"Ctrl_L"	]
+    [nil		"Super_L"	]
+    [nil		"Alt_L"		]
+    ["SPC"		"space"		]
+    [nil		"Alt_R"		]
+    [nil		"Super_R"	]
+    ["<menu>"		"Menu"		]
+    [nil		"Ctrl_R"	]
 
-    ("Up" . "<up>")
-    ("Down" . "<down>")
-    ("Left" . "<left>")
-    ("Right" . "<right>")
+    ["<up>"		"Up"		]
+    ["<down>"		"Down"		]
+    ["<left>"		"Left"		]
+    ["<right>"		"Right"		]
 
-    ("Insert" . "<insert>")
-    ("Delete" . "<delete>")
-    ("Home" . "<home>")
-    ("End" . "<end>")
-    ("Prior" . "<prior>")
-    ("Next" . "<next>")
+    ["<insert>"		"Insert"	]
+    ["<delete>"		"Delete"	]
+    ["<home>"		"Home"		]
+    ["<end>"		"End"		]
+    ["<prior>"		"Prior"		]
+    ["<next>"		"Next"		]
 
     ;; Add new entries at the end of the list, to avoid disrupting
     ;; existing configurations.
@@ -143,19 +143,28 @@ file."
     )
   "List of keys supported by the `term-keys' package.
 
-TODO: Finalize and document structure"
+Each item in the list is a 2-element vector:
+
+The first element is the Emacs key name, as it occurs in
+`describe-key' or `kbd'.  nil can be used to indicate keys which
+Emacs currently does not recognize (but are still known by other
+input systems), such as modifier keys (which Emacs can't process
+on its own, only in combination with a non-modifier key).
+
+The second element is the X11 KeySym name, as returned by
+XKeysymToString.  Used for urxvt/xterm configuration."
   :type '(repeatn
-	  (cons
+	  (vector
 	   :tag "Key mapping"
-	   (string
-	    :tag "X11 KeySym")
 	   (choice
 	    :tag "Emacs key"
 	    (const
 	     :tag "No corresponding Emacs key"
 	     nil)
 	    (string
-	     :tag "Emacs key name"))))
+	     :tag "Emacs key name"))
+	   (string
+	    :tag "X11 KeySym")))
   :group 'term-keys)
 
 
@@ -304,14 +313,14 @@ whether they're pressed or not)."
 (defun term-keys/iterate-keys (fun)
   "Call FUN over every enabled key combination.
 
-Iterate over all elements of `term-keys/mapping' and
-modifier key combinations, filter the enabled ones using
-`term-keys/want-key-p-func', and call (FUN INDEX PAIR SHIFT
+Iterate over all elements of `term-keys/mapping' and modifier key
+combinations, filter the enabled ones using
+`term-keys/want-key-p-func', and call (FUN INDEX KEY SHIFT
 CONTROL META SUPER HYPER ALT).
 
 Collect FUN's return values in a list and return it."
   (cl-loop
-   for pair in term-keys/mapping
+   for key in term-keys/mapping
    for index from 0
    append
    (cl-loop
@@ -323,10 +332,10 @@ Collect FUN's return values in a list and return it."
     for hyper   = (not (zerop (logand mods 16)))
     for alt     = (not (zerop (logand mods 32)))
     if (and
-	(cdr pair)
-	(funcall term-keys/want-key-p-func (car pair)
+	(elt key 0)
+	(funcall term-keys/want-key-p-func (elt key 1)
 		 shift control meta super hyper alt))
-    collect (funcall fun index pair
+    collect (funcall fun index key
 		     shift control meta super hyper alt))))
 
 
@@ -334,7 +343,7 @@ Collect FUN's return values in a list and return it."
 (defun term-keys/init ()
   "Set up configured key sequences for the current terminal."
   (term-keys/iterate-keys
-   (lambda (index pair shift control meta super hyper alt)
+   (lambda (index key shift control meta super hyper alt)
      (define-key
        input-decode-map
        (concat
@@ -342,7 +351,7 @@ Collect FUN's return values in a list and return it."
 	(term-keys/encode-key index shift control meta super hyper alt)
 	term-keys/suffix)
        (kbd (term-keys/format-key
-	     (cdr pair) shift control meta super hyper alt))))))
+	     (elt key 0) shift control meta super hyper alt))))))
 
 
 ;;;###autoload
@@ -384,11 +393,11 @@ arguments necessary to configure the terminal emulator to encode
 key sequences (as configured by `term-keys/want-key-p-func')."
   (apply #'nconc
 	 (term-keys/iterate-keys
-	  (lambda (index pair shift control meta super hyper alt)
+	  (lambda (index key shift control meta super hyper alt)
 	    (list
 	     (concat
 	      "-keysym."
-	      (term-keys/urxvt-format-key (car pair) shift control meta super hyper alt))
+	      (term-keys/urxvt-format-key (elt key 1) shift control meta super hyper alt))
 	     (concat
 	      "string:"
 	      term-keys/prefix
@@ -423,9 +432,9 @@ The returned string is suitable to be added as-is to an
 ~/.Xresources file."
   (apply #'concat
 	 (term-keys/iterate-keys
-	  (lambda (index pair shift control meta super hyper alt)
+	  (lambda (index key shift control meta super hyper alt)
 	    (format "URxvt.keysym.%s: string:%s%s%s\n"
-		    (term-keys/urxvt-format-key (car pair) shift control meta super hyper alt)
+		    (term-keys/urxvt-format-key (elt key 1) shift control meta super hyper alt)
 		    term-keys/prefix
 		    (term-keys/encode-key index shift control meta super hyper alt)
 		    term-keys/suffix)))))
@@ -476,9 +485,9 @@ line), the xterm translation entries necessary to configure xterm
 to encode term-keys key sequences (as configured by
 `term-keys/want-key-p-func')."
   (term-keys/iterate-keys
-   (lambda (index pair shift control meta super hyper alt)
+   (lambda (index key shift control meta super hyper alt)
      (format "%-55s: %s"
-	     (term-keys/xterm-format-key (car pair) shift control meta super hyper alt)
+	     (term-keys/xterm-format-key (elt key 1) shift control meta super hyper alt)
 	     (mapconcat
 	      (lambda (c) (format "string(0x%02x)" c))
 	      (append
