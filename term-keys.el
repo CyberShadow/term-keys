@@ -364,7 +364,7 @@ well."
 ;; urxvt
 
 
-(defun term-keys/format-urxvt-key (key shift control meta super hyper alt)
+(defun term-keys/urxvt-format-key (key shift control meta super hyper alt)
   "Format key modifiers in urxvt syntax.
 
 Returns KEY prepended with S-, C-, M-, s-, H-, or A- depending on
@@ -388,7 +388,7 @@ key sequences (as configured by `term-keys/want-key-p-func')."
 	    (list
 	     (concat
 	      "-keysym."
-	      (term-keys/format-urxvt-key (car pair) shift control meta super hyper alt))
+	      (term-keys/urxvt-format-key (car pair) shift control meta super hyper alt))
 	     (concat
 	      "string:"
 	      term-keys/prefix
@@ -425,7 +425,7 @@ The returned string is suitable to be added as-is to an
 	 (term-keys/iterate-keys
 	  (lambda (index pair shift control meta super hyper alt)
 	    (format "URxvt.keysym.%s: string:%s%s%s\n"
-		    (term-keys/format-urxvt-key (car pair) shift control meta super hyper alt)
+		    (term-keys/urxvt-format-key (car pair) shift control meta super hyper alt)
 		    term-keys/prefix
 		    (term-keys/encode-key index shift control meta super hyper alt)
 		    term-keys/suffix)))))
@@ -448,7 +448,7 @@ This function is used for testing and as an example."
 ;; xterm
 
 
-(defun term-keys/format-xterm-key (key shift control meta super hyper alt)
+(defun term-keys/xterm-format-key (key shift control meta super hyper alt)
   "Format key modifiers in xterm key translation syntax.
 
 Returns the xterm translation string corresponding to the KEY and
@@ -478,7 +478,7 @@ to encode term-keys key sequences (as configured by
   (term-keys/iterate-keys
    (lambda (index pair shift control meta super hyper alt)
      (format "%-55s: %s"
-	     (term-keys/format-xterm-key (car pair) shift control meta super hyper alt)
+	     (term-keys/xterm-format-key (car pair) shift control meta super hyper alt)
 	     (mapconcat
 	      (lambda (c) (format "string(0x%02x)" c))
 	      (append
