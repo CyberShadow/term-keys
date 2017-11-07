@@ -348,6 +348,7 @@ Collect FUN's return values in a list and return it."
 ;;;###autoload
 (defun term-keys/init ()
   "Set up configured key sequences for the current terminal."
+  (interactive)
   (term-keys/iterate-keys
    (lambda (index key shift control meta super hyper alt)
      (define-key
