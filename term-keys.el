@@ -32,7 +32,9 @@
 
 ;;; Code:
 
+
 (require 'cl-lib)
+
 
 (defgroup term-keys nil
   "The `term-keys' customization group.
@@ -43,6 +45,7 @@ a terminal emulator.
 For more information, please see the accompanying README.md
 file."
   :group 'convenience)
+
 
 (defcustom term-keys/mapping
   '(["<escape>"		"Escape"	1	"Esc"		]
@@ -256,6 +259,7 @@ instead."
       ;; Menu (Apps) key
       (string-equal key "Menu")
       ))))
+
 
 (defcustom term-keys/want-key-p-func 'term-keys/want-key-p-def
   "Function for deciding whether to encode a key combination.
