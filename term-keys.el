@@ -415,7 +415,7 @@ additionally upcasing letter keys."
 
 This function returns a list of urxvt (rxvt-unicode) command line
 arguments necessary to configure the terminal emulator to encode
-key sequences (as configured by `term-keys/want-key-p-func')."
+key sequences, according to the term-keys configuration."
   (apply #'nconc
 	 (term-keys/iterate-keys
 	  (lambda (index keymap mods)
@@ -435,7 +435,7 @@ key sequences (as configured by `term-keys/want-key-p-func')."
 
 This function returns, as a string, a shell script which launches
 urxvt (rxvt-unicode) configured to encode term-keys key
-sequences (as configured by `term-keys/want-key-p-func').
+sequences, according to the term-keys configuration.
 
 The returned string is suitable to be saved as-is in an
 executable file and used for launching urxvt."
@@ -451,7 +451,7 @@ executable file and used for launching urxvt."
 
 This function returns, as a string, the .Xresources entries
 necessary to configure urxvt to encode term-keys key
-sequences (as configured by `term-keys/want-key-p-func').
+sequences, according to the term-keys configuration.
 
 The returned string is suitable to be added as-is to an
 ~/.Xresources file."
@@ -508,8 +508,8 @@ modifier state MODS."
 
 This function returns, as a list of strings (one string per
 line), the xterm translation entries necessary to configure xterm
-to encode term-keys key sequences (as configured by
-`term-keys/want-key-p-func')."
+to encode term-keys key sequences, according to the term-keys
+configuration."
   (term-keys/iterate-keys
    (lambda (index keymap mods)
      (format "%-55s: %s"
@@ -528,8 +528,8 @@ to encode term-keys key sequences (as configured by
   "Construct xterm configuration in the form of .Xresources entries.
 
 This function returns, as a string, the .Xresources entries
-necessary to configure xterm to encode term-keys key
-sequences (as configured by `term-keys/want-key-p-func').
+necessary to configure xterm to encode term-keys key sequences,
+according to the term-keys configuration.
 
 The returned string is suitable to be added as-is to an
 ~/.Xresources file."
@@ -544,7 +544,7 @@ The returned string is suitable to be added as-is to an
 
 This function returns a list of xterm command line arguments
 necessary to configure the terminal emulator to encode key
-sequences (as configured by `term-keys/want-key-p-func')."
+sequences, according to the term-keys configuration."
   (list
    "-xrm"
    (mapconcat #'identity
@@ -558,8 +558,8 @@ sequences (as configured by `term-keys/want-key-p-func')."
   "Construct xterm configuration in the form of a shell script.
 
 This function returns, as a string, a shell script which launches
-xterm configured to encode term-keys key sequences (as configured
-by `term-keys/want-key-p-func').
+xterm configured to encode term-keys key sequences, according to
+the term-keys configuration.
 
 The returned string is suitable to be saved as-is in an
 executable file and used for launching xterm."
@@ -650,7 +650,7 @@ F1-F8 keys."
 
 This function returns, as a string, a keymap which can be used to
 configure the Linux kernel's TTY emulator to encode term-keys key
-sequences (as configured by `term-keys/want-key-p-func').
+sequences, according to the term-keys configuration.
 
 The returned string is suitable to be saved as-is in a .keymap
 file and loaded by the loadkeys program."
@@ -735,8 +735,8 @@ for this modifier."
   "Construct Konsole key binding configuration as .keytab file syntax.
 
 This function returns, as a string, a Konsole keytab which can be
-used to configure Konsole to encode term-keys key sequences (as
-configured by `term-keys/want-key-p-func').
+used to configure Konsole to encode term-keys key sequences,
+according to the term-keys configuration.
 
 The returned string is suitable to be pasted as-is to the end of
 an existing Konsole .keytab file."
@@ -860,8 +860,8 @@ Translate Emacs modifiers MODS to X11 modifiers (according to
 
 This function returns, as a string, C code of Key entries of the
 config.h 'key' array, which can be used to configure st to encode
-term-keys key sequences (as configured by
-`term-keys/want-key-p-func').
+term-keys key sequences, according to the term-keys
+configuration.
 
 The returned string is suitable to be pasted as-is into the 'key'
 array in the st config.h configuration file; however, this is
@@ -904,8 +904,8 @@ just one half of the necessary configuration (see
 
 This function returns, as a string, C code of KeySym entries of
 the config.h 'mappedkeys' array, which can be used to configure
-st to encode term-keys key sequences (as configured by
-`term-keys/want-key-p-func').
+st to encode term-keys key sequences, according to the term-keys
+configuration.
 
 The returned string is suitable to be pasted as-is into the
 'mappedkeys' array in the st config.h configuration file;
