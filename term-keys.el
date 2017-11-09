@@ -204,51 +204,58 @@ combination.  Can be any character which isn't used in the
   :group 'term-keys)
 
 
-(defun term-keys/want-key-p-def (key shift control meta super hyper alt)
+(defun term-keys/want-key-p-def (key mods)
   "Default implementation for `term-keys/want-key-p-func'.
 
 This function controls which key combinations are to be encoded
 and decoded by default using the term-keys protocol extension.
-KEY is the KeySym name as listed in `term-keys/mapping'; the
-modifiers SHIFT / CONTROL / META / SUPER / HYPER / ALT are t or
-nil depending on whether they are depressed or not.  Returns
-non-nil if the specified key combination should be encoded.
+KEY is the KeySym name as listed in `term-keys/mapping'; MODS is
+a 6-element bool vector representing the modifiers Shift /
+Control / Meta / Super / Hyper / Alt respectively, with t or nil
+representing whether they are depressed or not.  Returns non-nil
+if the specified key combination should be encoded.
 
 Note that the ALT modifier rarely actually corresponds to the Alt
 key on PC keyboards; the META modifier will usually be used
 instead."
-  (and
+  (let ((shift   (elt mods 0))
+	(control (elt mods 1))
+	(meta    (elt mods 2))
+	(super   (elt mods 3))
+	(hyper   (elt mods 4))
+	(alt     (elt mods 5)))
+    (and
 
-   ;; We don't care about Super/Hyper/Alt modifiers
-   (not super)
-   (not hyper)
-   (not alt)
+     ;; We don't care about Super/Hyper/Alt modifiers
+     (not super)
+     (not hyper)
+     (not alt)
 
-   (or
-    ;; https://lists.gnu.org/archive/html/bug-gnu-emacs/2004-03/msg00306.html
-    (and (string-equal key "g") control meta)
+     (or
+      ;; https://lists.gnu.org/archive/html/bug-gnu-emacs/2004-03/msg00306.html
+      (and (string-equal key "g") control meta)
 
-    ;; Navigation keys and Control
-    (and (member key '("Up" "Down" "Left" "Right" "Home" "End" "Prior" "Next")) control (or shift meta))
+      ;; Navigation keys and Control
+      (and (member key '("Up" "Down" "Left" "Right" "Home" "End" "Prior" "Next")) control (or shift meta))
 
-    ;; S-PgUp/PgDn - usually used for scrolling the terminal, but not useful in Emacs
-    (and (member key '("Prior" "Next")) shift)
+      ;; S-PgUp/PgDn - usually used for scrolling the terminal, but not useful in Emacs
+      (and (member key '("Prior" "Next")) shift)
 
-    ;; Ctrl+Tab
-    (and (string-equal key "Tab") control)
+      ;; Ctrl+Tab
+      (and (string-equal key "Tab") control)
 
-    ;; Ctrl+BackSpace
-    (and (string-equal key "BackSpace") control)
+      ;; Ctrl+BackSpace
+      (and (string-equal key "BackSpace") control)
 
-    ;; C-S-x is unrepresentable for letters
-    (and (string-match-p "^[a-z]$" key) control shift)
+      ;; C-S-x is unrepresentable for letters
+      (and (string-match-p "^[a-z]$" key) control shift)
 
-    ;; C-x is unrepresentable for digits
-    (and (string-match-p "^[0-9]$" key) control)
+      ;; C-x is unrepresentable for digits
+      (and (string-match-p "^[0-9]$" key) control)
 
-    ;; Menu (Apps) key
-    (string-equal key "Menu")
-    )))
+      ;; Menu (Apps) key
+      (string-equal key "Menu")
+      ))))
 
 (defcustom term-keys/want-key-p-func 'term-keys/want-key-p-def
   "Function for deciding whether to encode a key combination.
@@ -263,19 +270,22 @@ change which key combinations to encode."
   :group 'term-keys)
 
 
-(defun term-keys/format-key (key shift control meta super hyper alt)
+(defconst term-keys/modifier-chars "SCMsHA"
+  "The characters for the Emacs modifiers supported by term-keys.")
+
+
+(defun term-keys/format-key (key mods)
   "Format key modifiers in Emacs/urxvt syntax.
 
 Returns KEY prepended with S-, C-, M-, s-, H-, or A- depending on
-whether SHIFT, CONTROL, META, SUPER, HYPER, or ALT are
-correspondingly non-nil."
+the elements of the bool vector MODS are correspondingly
+non-nil."
   (concat
-   (if shift   "S-" "")
-   (if control "C-" "")
-   (if meta    "M-" "")
-   (if super   "s-" "")
-   (if hyper   "H-" "")
-   (if alt     "A-" "")
+   (cl-loop for modflag across mods
+	    for index from 0
+	    if modflag
+	    concat (concat (string (elt term-keys/modifier-chars index))
+			   "-"))
    key))
 
 
@@ -303,23 +313,21 @@ configuration file.  Current implementation uses base-96 (ASCII
 			    (term-keys/encode-number n)) n)))
 
 
-(defun term-keys/encode-key (key shift control meta super hyper alt)
+(defun term-keys/encode-key (key mods)
   "Encode a key combination to term-keys' protocol.
 
 Returns a string ready to be sent by a terminal emulator (or
 received by Emacs running in a terminal) which encodes the
 combination of KEY (the key's index in the `term-keys/mapping'
-table) and SHIFT, CONTROL, META, SUPER, HYPER, or ALT (indicating
-whether they're pressed or not)."
+table) and the modifiers MODS (a 6-element bool vector indicating
+whether the respective modifier is pressed or not)."
   (term-keys/encode-number
-   (+
-    (if shift 1 0)
-    (if control 2 0)
-    (if meta 4 0)
-    (if super 8 0)
-    (if hyper 16 0)
-    (if alt 32 0)
-    (* 64 key))))
+   (cl-loop for index from 0
+	    for factor = 1 then (* factor 2)
+	    for modflag across mods
+	    if modflag
+	    sum factor into modflags
+	    finally return (+ modflags (* factor key)))))
 
 
 (defun term-keys/iterate-keys (fun)
@@ -327,8 +335,10 @@ whether they're pressed or not)."
 
 Iterate over all elements of `term-keys/mapping' and modifier key
 combinations, filter the enabled ones using
-`term-keys/want-key-p-func', and call (FUN INDEX KEYMAP SHIFT
-CONTROL META SUPER HYPER ALT).
+`term-keys/want-key-p-func', and call (FUN INDEX KEYMAP MODS),
+where INDEX is the key index in `term-keys/mapping', KEYMAP is
+the `term-keys/mapping' element vector at that index, and MODS is
+a bool vector for the active modifier keys.
 
 Collect FUN's return values in a list and return it."
   (cl-loop
@@ -336,19 +346,15 @@ Collect FUN's return values in a list and return it."
    for index from 0
    append
    (cl-loop
-    for mods from 0 to 63
-    for shift   = (not (zerop (logand mods  1)))
-    for control = (not (zerop (logand mods  2)))
-    for meta    = (not (zerop (logand mods  4)))
-    for super   = (not (zerop (logand mods  8)))
-    for hyper   = (not (zerop (logand mods 16)))
-    for alt     = (not (zerop (logand mods 32)))
+    ;; Iterate from 0 to 2^64-1 for a bitmask of all modifier combinations
+    for modnum from 0 to (1- (lsh 1 (length term-keys/modifier-chars)))
+    ;; Convert the integer bitmask to a bool-vector
+    for mods = (apply #'bool-vector (mapcar (lambda (n) (not (zerop (logand modnum (lsh 1 n)))))
+					    (number-sequence 0 (1- (length term-keys/modifier-chars)))))
     if (and
-	(elt keymap 0)
-	(funcall term-keys/want-key-p-func (elt keymap 1)
-		 shift control meta super hyper alt))
-    collect (funcall fun index keymap
-		     shift control meta super hyper alt))))
+	(elt keymap 0)                  ; Representable in Emacs?
+	(funcall term-keys/want-key-p-func (elt keymap 1) mods)) ; Want this key combination?
+    collect (funcall fun index keymap mods))))
 
 
 ;;;###autoload
@@ -356,15 +362,15 @@ Collect FUN's return values in a list and return it."
   "Set up configured key sequences for the current terminal."
   (interactive)
   (term-keys/iterate-keys
-   (lambda (index keymap shift control meta super hyper alt)
+   (lambda (index keymap mods)
      (define-key
        input-decode-map
        (concat
 	term-keys/prefix
-	(term-keys/encode-key index shift control meta super hyper alt)
+	(term-keys/encode-key index mods)
 	term-keys/suffix)
        (kbd (term-keys/format-key
-	     (elt keymap 0) shift control meta super hyper alt))))))
+	     (elt keymap 0) mods))))))
 
 
 ;;;###autoload
@@ -386,16 +392,22 @@ well."
 ;; urxvt
 
 
-(defun term-keys/urxvt-format-key (key shift control meta super hyper alt)
+(defun term-keys/urxvt-format-key (key mods)
   "Format key modifiers in urxvt syntax.
 
 Returns KEY prepended with S-, C-, M-, s-, H-, or A- depending on
-whether SHIFT, CONTROL, META, SUPER, HYPER, or ALT are
-correspondingly non-nil, additionally upcasing letter keys."
-  (if (and shift (string-match-p "^[a-z]$" key))
+the elements of the bool vector MODS are correspondingly non-nil,
+additionally upcasing letter keys."
+  (if (and (elt mods 0)                 ; Shift
+	   (string-match-p "^[a-z]$" key))
       ;; Upcase letter keys
-      (term-keys/format-key (upcase key) nil control meta super hyper alt)
-    (term-keys/format-key key shift control meta super hyper alt)))
+      (term-keys/format-key (upcase key) (bool-vector nil
+						      (elt mods 1)
+						      (elt mods 2)
+						      (elt mods 3)
+						      (elt mods 4)
+						      (elt mods 5)))
+    (term-keys/format-key key mods)))
 
 
 (defun term-keys/urxvt-args ()
@@ -406,15 +418,15 @@ arguments necessary to configure the terminal emulator to encode
 key sequences (as configured by `term-keys/want-key-p-func')."
   (apply #'nconc
 	 (term-keys/iterate-keys
-	  (lambda (index keymap shift control meta super hyper alt)
+	  (lambda (index keymap mods)
 	    (list
 	     (concat
 	      "-keysym."
-	      (term-keys/urxvt-format-key (elt keymap 1) shift control meta super hyper alt))
+	      (term-keys/urxvt-format-key (elt keymap 1) mods))
 	     (concat
 	      "string:"
 	      term-keys/prefix
-	      (term-keys/encode-key index shift control meta super hyper alt)
+	      (term-keys/encode-key index mods)
 	      term-keys/suffix))))))
 
 
@@ -445,11 +457,11 @@ The returned string is suitable to be added as-is to an
 ~/.Xresources file."
   (apply #'concat
 	 (term-keys/iterate-keys
-	  (lambda (index keymap shift control meta super hyper alt)
+	  (lambda (index keymap mods)
 	    (format "URxvt.keysym.%s: string:%s%s%s\n"
-		    (term-keys/urxvt-format-key (elt keymap 1) shift control meta super hyper alt)
+		    (term-keys/urxvt-format-key (elt keymap 1) mods)
 		    term-keys/prefix
-		    (term-keys/encode-key index shift control meta super hyper alt)
+		    (term-keys/encode-key index mods)
 		    term-keys/suffix)))))
 
 
@@ -470,23 +482,24 @@ This function is used for testing and as an example."
 ;; xterm
 
 
-(defun term-keys/xterm-format-key (key shift control meta super hyper alt)
+(defconst term-keys/xterm-modifier-names ["Shift" "Ctrl" "Meta" "Super" "Hyper" "Alt"]
+  "Modifier key names in xterm key translation syntax.")
+
+
+(defun term-keys/xterm-format-key (key mods)
   "Format key modifiers in xterm key translation syntax.
 
 Returns the xterm translation string corresponding to the KEY and
-modifier state SHIFT, CONTROL, META, SUPER, HYPER, and ALT."
+modifier state MODS."
   (concat
-   (if shift   " " "~") "Shift "
-   (if control " " "~") "Ctrl "
-   (if meta    " " "~") "Meta "
-   (if super   " " "~") "Super "
-   (if hyper   " " "~") "Hyper "
-   (if alt     " " "~") "Alt "
+   (cl-loop for modflag across mods
+	    for index from 0
+	    concat
+	    (concat
+	     (if modflag " " "~")
+	     (elt term-keys/xterm-modifier-names index)
+	     " "))
    "<Key> "
-   ;; (if (and shift (string-match-p "^[a-z]$" key))
-   ;;    ;; Upcase letter keys
-   ;;     (upcase key)
-   ;;   key)))
    key))
 
 
@@ -498,14 +511,14 @@ line), the xterm translation entries necessary to configure xterm
 to encode term-keys key sequences (as configured by
 `term-keys/want-key-p-func')."
   (term-keys/iterate-keys
-   (lambda (index keymap shift control meta super hyper alt)
+   (lambda (index keymap mods)
      (format "%-55s: %s"
-	     (term-keys/xterm-format-key (elt keymap 1) shift control meta super hyper alt)
+	     (term-keys/xterm-format-key (elt keymap 1) mods)
 	     (mapconcat
 	      (lambda (c) (format "string(0x%02x)" c))
 	      (append
 	       term-keys/prefix
-	       (term-keys/encode-key index shift control meta super hyper alt)
+	       (term-keys/encode-key index mods)
 	       term-keys/suffix
 	       nil)
 	      " ")))))
@@ -587,6 +600,7 @@ This function is used for testing and as an example."
 		 (const "CapsShift")
 		 (const :tag "(none)" nil)))
 
+
 (defcustom term-keys/linux-modifier-map ["Shift" "Control" "Alt" nil nil "AltGr"]
   "Modifier keys for Linux TTY keymaps.
 
@@ -643,41 +657,40 @@ file and loaded by the loadkeys program."
   (apply #'concat
 	 (let ((fkey term-keys/linux-first-function-key))
 	   (term-keys/iterate-keys
-	    (lambda (index keymap shift control meta super hyper alt)
-	      (let* ((mods (vector shift control meta super hyper alt)))
+	    (lambda (index keymap mods)
 
-		;; Skip key combinations with unrepresentable modifiers
-		(unless (cl-reduce (lambda (x y) (or x y)) ; any
-				   (mapcar (lambda (n) ; active modifier mapped to nil
-					     (and (elt mods n)
-						  (not (elt term-keys/linux-modifier-map n))))
-					   (number-sequence 0 (1- (length mods))))) ; 0..5
-		  (prog1
-		      (format "# %s\n%s\tkeycode %3d = F%d\nstring F%d = \"%s\"\n\n"
-			      ;; Emacs key name for comment
-			      (term-keys/format-key (elt keymap 0) shift control meta super hyper alt)
+	      ;; Skip key combinations with unrepresentable modifiers
+	      (unless (cl-reduce (lambda (x y) (or x y)) ; any
+				 (mapcar (lambda (n) ; active modifier mapped to nil
+					   (and (elt mods n)
+						(not (elt term-keys/linux-modifier-map n))))
+					 (number-sequence 0 (1- (length mods))))) ; 0..5
+		(prog1
+		    (format "# %s\n%s\tkeycode %3d = F%d\nstring F%d = \"%s\"\n\n"
+			    ;; Emacs key name for comment
+			    (term-keys/format-key (elt keymap 0) mods)
 
-			      (if (cl-reduce (lambda (x y) (or x y)) mods)
-				  ;; tab-separated mod list
-				  (mapconcat
-				   (lambda (n)
-				     (if (elt mods n) (elt term-keys/linux-modifier-map n) ""))
-				   (number-sequence 0 (1- (length mods)))
-				   "\t")
-				;; "plain" if no mods
-				(concat "plain" (make-string (1- (length mods)) ?\t)))
-			      (elt keymap 2) ; keynumber
-			      fkey        ; F-key number (use)
-			      fkey        ; F-key number (declaration)
-			      (mapconcat  ; octal-escaped sequence
-			       (lambda (x) (format "\\%03o" x))
-			       (append
-				term-keys/prefix
-				(term-keys/encode-key index shift control meta super hyper alt)
-				term-keys/suffix
-				nil)
-			       ""))
-		    (setq fkey (1+ fkey))))))))))
+			    (if (cl-reduce (lambda (x y) (or x y)) mods)
+				;; tab-separated mod list
+				(mapconcat
+				 (lambda (n)
+				   (if (elt mods n) (elt term-keys/linux-modifier-map n) ""))
+				 (number-sequence 0 (1- (length mods)))
+				 "\t")
+			      ;; "plain" if no mods
+			      (concat "plain" (make-string (1- (length mods)) ?\t)))
+			    (elt keymap 2) ; keynumber
+			    fkey        ; F-key number (use)
+			    fkey        ; F-key number (declaration)
+			    (mapconcat  ; octal-escaped sequence
+			     (lambda (x) (format "\\%03o" x))
+			     (append
+			      term-keys/prefix
+			      (term-keys/encode-key index mods)
+			      term-keys/suffix
+			      nil)
+			     ""))
+		  (setq fkey (1+ fkey)))))))))
 
 
 ;; Konsole
@@ -697,6 +710,7 @@ file and loaded by the loadkeys program."
 		 (const "AnyModifier")
 		 (const "AppKeypad")
 		 (const :tag "(none)" nil)))
+
 
 (defcustom term-keys/konsole-modifier-map ["Shift" "Ctrl" "Alt" "Meta" nil nil]
   "Modifier keys for Konsole key bindings.
@@ -728,34 +742,33 @@ The returned string is suitable to be pasted as-is to the end of
 an existing Konsole .keytab file."
   (apply #'concat
 	 (term-keys/iterate-keys
-	  (lambda (index keymap shift control meta super hyper alt)
-	    (let* ((mods (vector shift control meta super hyper alt)))
+	  (lambda (index keymap mods)
 
-	      ;; Skip key combinations with unrepresentable modifiers
-	      (unless (cl-reduce (lambda (x y) (or x y)) ; any
-				 (mapcar (lambda (n) ; active modifier mapped to nil
-					   (and (elt mods n)
-						(not (elt term-keys/konsole-modifier-map n))))
-					 (number-sequence 0 (1- (length mods))))) ; 0..5
-		(format "key %s%s : \"%s\"\n"
-			(elt keymap 3) ; key name
-			(mapconcat
-			 (lambda (n)
-			   (if (elt term-keys/konsole-modifier-map n)
-			       (concat
-				(if (elt mods n) "+" "-")
-				(elt term-keys/konsole-modifier-map n))
-			     ""))
-			 (number-sequence 0 (1- (length mods)))
-			 "")
-			(mapconcat  ; hex-escaped sequence
-			 (lambda (x) (format "\\x%02X" x))
-			 (append
-			  term-keys/prefix
-			  (term-keys/encode-key index shift control meta super hyper alt)
-			  term-keys/suffix
-			  nil)
-			 ""))))))))
+	    ;; Skip key combinations with unrepresentable modifiers
+	    (unless (cl-reduce (lambda (x y) (or x y)) ; any
+			       (mapcar (lambda (n) ; active modifier mapped to nil
+					 (and (elt mods n)
+					      (not (elt term-keys/konsole-modifier-map n))))
+				       (number-sequence 0 (1- (length mods))))) ; 0..5
+	      (format "key %s%s : \"%s\"\n"
+		      (elt keymap 3) ; key name
+		      (mapconcat
+		       (lambda (n)
+			 (if (elt term-keys/konsole-modifier-map n)
+			     (concat
+			      (if (elt mods n) "+" "-")
+			      (elt term-keys/konsole-modifier-map n))
+			   ""))
+		       (number-sequence 0 (1- (length mods)))
+		       "")
+		      (mapconcat  ; hex-escaped sequence
+		       (lambda (x) (format "\\x%02X" x))
+		       (append
+			term-keys/prefix
+			(term-keys/encode-key index mods)
+			term-keys/suffix
+			nil)
+		       "")))))))
 
 
 ;; St
@@ -809,14 +822,13 @@ and MOD5 modifier flags are respectively active."
     key)))
 
 
-(defun term-keys/x11-apply-mods (key shift control meta super hyper alt)
+(defun term-keys/x11-apply-mods (key mods)
   "Apply Emacs modifiers to X11 KeySym KEY.
 
-Translate Emacs modifiers SHIFT, CONTROL, META, SUPER, HYPER, and
-ALT to X11 modifiers (according to `term-keys/x11-modifier-map')
-and invoke `term-keys/x11-apply-mod-state')."
-  (let ((mods (vector shift control meta super hyper alt))
-	shift lock control mod1 mod2 mod3 mod4 mod5)
+Translate Emacs modifiers MODS to X11 modifiers (according to
+`term-keys/x11-modifier-map') and invoke
+`term-keys/x11-apply-mod-state')."
+  (let (shift lock control mod1 mod2 mod3 mod4 mod5)
     (mapc
      (lambda (n)
        (when (elt mods n)
@@ -857,35 +869,34 @@ just one half of the necessary configuration (see
 `term-keys/st-config-mappedkeys' for the other half)."
   (apply #'concat
 	 (term-keys/iterate-keys
-	  (lambda (index keymap shift control meta super hyper alt)
-	    (let ((mods (vector shift control meta super hyper alt)))
+	  (lambda (index keymap mods)
 
-	      ;; Skip key combinations with unrepresentable modifiers
-	      (unless (cl-reduce (lambda (x y) (or x y)) ; any
-				 (mapcar (lambda (n) ; active modifier mapped to nil
-					   (and (elt mods n)
-						(not (elt term-keys/x11-modifier-map n))))
-					 (number-sequence 0 (1- (length mods))))) ; 0..5
-		(format "{ XK_%-16s, %-40s, \"%s\", 0, 0, 0},\n"
-			(term-keys/x11-apply-mods (elt keymap 1) shift control meta super hyper alt) ; X11 key name
-			(if (cl-reduce (lambda (x y) (or x y)) mods)
-			    (mapconcat
-			     (lambda (n)
-			       (concat
-				(elt term-keys/x11-modifier-map n)
-				"Mask"))
-			     (cl-remove-if-not (lambda (n) (elt mods n))
-					       (number-sequence 0 (1- (length mods))))
-			     "|")
-			  "XK_NO_MOD")
-			(mapconcat  ; hex-escaped sequence
-			 (lambda (x) (format "\\x%02X" x))
-			 (append
-			  term-keys/prefix
-			  (term-keys/encode-key index shift control meta super hyper alt)
-			  term-keys/suffix
-			  nil)
-			 ""))))))))
+	    ;; Skip key combinations with unrepresentable modifiers
+	    (unless (cl-reduce (lambda (x y) (or x y)) ; any
+			       (mapcar (lambda (n) ; active modifier mapped to nil
+					 (and (elt mods n)
+					      (not (elt term-keys/x11-modifier-map n))))
+				       (number-sequence 0 (1- (length mods))))) ; 0..5
+	      (format "{ XK_%-16s, %-40s, \"%s\", 0, 0, 0},\n"
+		      (term-keys/x11-apply-mods (elt keymap 1) mods) ; X11 key name
+		      (if (cl-reduce (lambda (x y) (or x y)) mods)
+			  (mapconcat
+			   (lambda (n)
+			     (concat
+			      (elt term-keys/x11-modifier-map n)
+			      "Mask"))
+			   (cl-remove-if-not (lambda (n) (elt mods n))
+					     (number-sequence 0 (1- (length mods))))
+			   "|")
+			"XK_NO_MOD")
+		      (mapconcat  ; hex-escaped sequence
+		       (lambda (x) (format "\\x%02X" x))
+		       (append
+			term-keys/prefix
+			(term-keys/encode-key index mods)
+			term-keys/suffix
+			nil)
+		       "")))))))
 
 
 (defun term-keys/st-config-mappedkeys ()
@@ -904,9 +915,9 @@ half)."
   (apply #'concat
 	 (delete-dups
 	  (term-keys/iterate-keys
-	   (lambda (index keymap shift control meta super hyper alt)
+	   (lambda (index keymap mods)
 	     (format "XK_%s,\n"
-		     (term-keys/x11-apply-mods (elt keymap 1) shift control meta super hyper alt)))))))
+		     (term-keys/x11-apply-mods (elt keymap 1) mods)))))))
 
 
 (provide 'term-keys)
