@@ -327,12 +327,12 @@ whether they're pressed or not)."
 
 Iterate over all elements of `term-keys/mapping' and modifier key
 combinations, filter the enabled ones using
-`term-keys/want-key-p-func', and call (FUN INDEX KEY SHIFT
+`term-keys/want-key-p-func', and call (FUN INDEX KEYMAP SHIFT
 CONTROL META SUPER HYPER ALT).
 
 Collect FUN's return values in a list and return it."
   (cl-loop
-   for key in term-keys/mapping
+   for keymap in term-keys/mapping
    for index from 0
    append
    (cl-loop
@@ -344,10 +344,10 @@ Collect FUN's return values in a list and return it."
     for hyper   = (not (zerop (logand mods 16)))
     for alt     = (not (zerop (logand mods 32)))
     if (and
-	(elt key 0)
-	(funcall term-keys/want-key-p-func (elt key 1)
+	(elt keymap 0)
+	(funcall term-keys/want-key-p-func (elt keymap 1)
 		 shift control meta super hyper alt))
-    collect (funcall fun index key
+    collect (funcall fun index keymap
 		     shift control meta super hyper alt))))
 
 
@@ -356,7 +356,7 @@ Collect FUN's return values in a list and return it."
   "Set up configured key sequences for the current terminal."
   (interactive)
   (term-keys/iterate-keys
-   (lambda (index key shift control meta super hyper alt)
+   (lambda (index keymap shift control meta super hyper alt)
      (define-key
        input-decode-map
        (concat
@@ -364,7 +364,7 @@ Collect FUN's return values in a list and return it."
 	(term-keys/encode-key index shift control meta super hyper alt)
 	term-keys/suffix)
        (kbd (term-keys/format-key
-	     (elt key 0) shift control meta super hyper alt))))))
+	     (elt keymap 0) shift control meta super hyper alt))))))
 
 
 ;;;###autoload
@@ -406,11 +406,11 @@ arguments necessary to configure the terminal emulator to encode
 key sequences (as configured by `term-keys/want-key-p-func')."
   (apply #'nconc
 	 (term-keys/iterate-keys
-	  (lambda (index key shift control meta super hyper alt)
+	  (lambda (index keymap shift control meta super hyper alt)
 	    (list
 	     (concat
 	      "-keysym."
-	      (term-keys/urxvt-format-key (elt key 1) shift control meta super hyper alt))
+	      (term-keys/urxvt-format-key (elt keymap 1) shift control meta super hyper alt))
 	     (concat
 	      "string:"
 	      term-keys/prefix
@@ -445,9 +445,9 @@ The returned string is suitable to be added as-is to an
 ~/.Xresources file."
   (apply #'concat
 	 (term-keys/iterate-keys
-	  (lambda (index key shift control meta super hyper alt)
+	  (lambda (index keymap shift control meta super hyper alt)
 	    (format "URxvt.keysym.%s: string:%s%s%s\n"
-		    (term-keys/urxvt-format-key (elt key 1) shift control meta super hyper alt)
+		    (term-keys/urxvt-format-key (elt keymap 1) shift control meta super hyper alt)
 		    term-keys/prefix
 		    (term-keys/encode-key index shift control meta super hyper alt)
 		    term-keys/suffix)))))
@@ -498,9 +498,9 @@ line), the xterm translation entries necessary to configure xterm
 to encode term-keys key sequences (as configured by
 `term-keys/want-key-p-func')."
   (term-keys/iterate-keys
-   (lambda (index key shift control meta super hyper alt)
+   (lambda (index keymap shift control meta super hyper alt)
      (format "%-55s: %s"
-	     (term-keys/xterm-format-key (elt key 1) shift control meta super hyper alt)
+	     (term-keys/xterm-format-key (elt keymap 1) shift control meta super hyper alt)
 	     (mapconcat
 	      (lambda (c) (format "string(0x%02x)" c))
 	      (append
@@ -643,7 +643,7 @@ file and loaded by the loadkeys program."
   (apply #'concat
 	 (let ((fkey term-keys/linux-first-function-key))
 	   (term-keys/iterate-keys
-	    (lambda (index key shift control meta super hyper alt)
+	    (lambda (index keymap shift control meta super hyper alt)
 	      (let* ((mods (vector shift control meta super hyper alt)))
 
 		;; Skip key combinations with unrepresentable modifiers
@@ -655,7 +655,7 @@ file and loaded by the loadkeys program."
 		  (prog1
 		      (format "# %s\n%s\tkeycode %3d = F%d\nstring F%d = \"%s\"\n\n"
 			      ;; Emacs key name for comment
-			      (term-keys/format-key (elt key 0) shift control meta super hyper alt)
+			      (term-keys/format-key (elt keymap 0) shift control meta super hyper alt)
 
 			      (if (cl-reduce (lambda (x y) (or x y)) mods)
 				  ;; tab-separated mod list
@@ -666,7 +666,7 @@ file and loaded by the loadkeys program."
 				   "\t")
 				;; "plain" if no mods
 				(concat "plain" (make-string (1- (length mods)) ?\t)))
-			      (elt key 2) ; keynumber
+			      (elt keymap 2) ; keynumber
 			      fkey        ; F-key number (use)
 			      fkey        ; F-key number (declaration)
 			      (mapconcat  ; octal-escaped sequence
@@ -728,7 +728,7 @@ The returned string is suitable to be pasted as-is to the end of
 an existing Konsole .keytab file."
   (apply #'concat
 	 (term-keys/iterate-keys
-	  (lambda (index key shift control meta super hyper alt)
+	  (lambda (index keymap shift control meta super hyper alt)
 	    (let* ((mods (vector shift control meta super hyper alt)))
 
 	      ;; Skip key combinations with unrepresentable modifiers
@@ -738,7 +738,7 @@ an existing Konsole .keytab file."
 						(not (elt term-keys/konsole-modifier-map n))))
 					 (number-sequence 0 (1- (length mods))))) ; 0..5
 		(format "key %s%s : \"%s\"\n"
-			(elt key 3) ; key name
+			(elt keymap 3) ; key name
 			(mapconcat
 			 (lambda (n)
 			   (if (elt term-keys/konsole-modifier-map n)
@@ -857,7 +857,7 @@ just one half of the necessary configuration (see
 `term-keys/st-config-mappedkeys' for the other half)."
   (apply #'concat
 	 (term-keys/iterate-keys
-	  (lambda (index key shift control meta super hyper alt)
+	  (lambda (index keymap shift control meta super hyper alt)
 	    (let ((mods (vector shift control meta super hyper alt)))
 
 	      ;; Skip key combinations with unrepresentable modifiers
@@ -867,7 +867,7 @@ just one half of the necessary configuration (see
 						(not (elt term-keys/x11-modifier-map n))))
 					 (number-sequence 0 (1- (length mods))))) ; 0..5
 		(format "{ XK_%-16s, %-40s, \"%s\", 0, 0, 0},\n"
-			(term-keys/x11-apply-mods (elt key 1) shift control meta super hyper alt) ; X11 key name
+			(term-keys/x11-apply-mods (elt keymap 1) shift control meta super hyper alt) ; X11 key name
 			(if (cl-reduce (lambda (x y) (or x y)) mods)
 			    (mapconcat
 			     (lambda (n)
@@ -904,9 +904,9 @@ half)."
   (apply #'concat
 	 (delete-dups
 	  (term-keys/iterate-keys
-	   (lambda (index key shift control meta super hyper alt)
+	   (lambda (index keymap shift control meta super hyper alt)
 	     (format "XK_%s,\n"
-		     (term-keys/x11-apply-mods (elt key 1) shift control meta super hyper alt)))))))
+		     (term-keys/x11-apply-mods (elt keymap 1) shift control meta super hyper alt)))))))
 
 
 (provide 'term-keys)
