@@ -129,9 +129,7 @@ This function is used for testing and as an example."
 	  (list
 	   "-xrm" "XTerm*eightBitInput: false"
 	    "-e" (car command-line-args) "-nw"
-	    "--load" (concat
-		      (file-name-directory (or load-file-name buffer-file-name))
-		      "term-keys.el")
+	    "--load" term-keys/main-file-name
 	    "--funcall" "term-keys/init"
 	    ))))
 

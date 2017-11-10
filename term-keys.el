@@ -396,5 +396,9 @@ well."
     (remove-hook 'tty-setup-hook 'term-keys/init)))
 
 
+(defconst term-keys/main-file-name (or load-file-name buffer-file-name)
+  "Path to this file.  Used for interop.")
+
+
 (provide 'term-keys)
 ;;; term-keys.el ends here
