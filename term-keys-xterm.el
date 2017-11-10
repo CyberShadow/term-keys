@@ -123,7 +123,7 @@ executable file and used for launching xterm."
   "Launch Emacs via xterm enhanced with term-keys.
 
 This function is used for testing and as an example."
-  (apply #'call-process "xterm" nil nil nil
+  (apply #'start-process "xterm" nil "xterm"
 	 (append
 	  (term-keys/xterm-args)
 	  (list

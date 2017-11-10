@@ -108,7 +108,7 @@ The returned string is suitable to be added as-is to an
   "Launch Emacs via urxvt enhanced with term-keys.
 
 This function is used for testing and as an example."
-  (apply #'call-process "urxvt" nil nil nil
+  (apply #'start-process "urxvt" nil "urxvt"
 	 (append
 	  (term-keys/urxvt-args)
 	  (list
