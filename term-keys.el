@@ -385,6 +385,7 @@ When enabled, automatically set up configured keys for new frames
 on TTY terminals.  If the current frame is on a TTY, set it up as
 well."
   :global t
+  :require 'term-keys
   (if term-keys-mode
       (progn
 	(add-hook 'tty-setup-hook 'term-keys/init)
