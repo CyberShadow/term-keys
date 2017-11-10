@@ -37,10 +37,10 @@
 
 
 (defgroup term-keys nil
-  "The `term-keys' customization group.
+  "Lossless keyboard input in a terminal emulator.
 
-This package allows lossless keyboard input when using Emacs from
-a terminal emulator.
+term-keys allows lossless keyboard input when using Emacs from a
+terminal emulator.
 
 For more information, please see the accompanying README.md
 file."
@@ -195,6 +195,7 @@ The prefix, or any starting substring of it, or any sequence
 beginning with it, should not be already bound to an action in
 Emacs.  E.g. with the default, neither ^[, ^[^_, or ^[^_abc
 should by themselves be bound to an Emacs action."
+  :type 'string
   :group 'term-keys)
 
 
@@ -204,6 +205,7 @@ should by themselves be bound to an Emacs action."
 Indicates the end of the data encoding the pressed key
 combination.  Can be any character which isn't used in the
 `term-keys/encode-number' encoding scheme."
+  :type 'string
   :group 'term-keys)
 
 
