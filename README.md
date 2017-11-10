@@ -8,7 +8,7 @@ This package allows configuring Emacs and a supported terminal emulator to handl
   * [Configuring Emacs](#configuring-emacs)
   * [Configuring `term-keys`](#configuring-term-keys)
   * [Terminal Emulators](#terminal-emulators)
-    * [urxvt (rxvt-unicode)](#urxvt-(rxvt-unicode))
+    * [urxvt (rxvt-unicode)](#urxvt-rxvt-unicode)
     * [xterm](#xterm)
     * [Konsole](#konsole)
     * [Yakuake](#yakuake)
