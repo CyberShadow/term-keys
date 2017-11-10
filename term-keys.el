@@ -3,7 +3,7 @@
 ;; Version: 0.1.0
 ;; Author: Vladimir Panteleev
 ;; Url: https://github.com/CyberShadow/term-keys
-;; Keywords: input
+;; Keywords: terminals
 ;; Package-Requires: ((emacs "24.3"))
 
 ;; This file is not part of GNU Emacs.
