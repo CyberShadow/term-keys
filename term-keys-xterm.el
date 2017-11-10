@@ -82,10 +82,12 @@ according to the term-keys configuration.
 
 The returned string is suitable to be added as-is to an
 ~/.Xresources file."
-  (apply #'concat
-	 "*VT100.Translations: #override \\\n"
-	 (mapcar (lambda (s) (concat s " \\\n"))
-		 (term-keys/xterm-translations))))
+  (concat
+   "\n*VT100.Translations: #override \\\n"
+   (mapconcat #'identity
+	      (term-keys/xterm-translations)
+	      " \\n\\\n")
+   "\n\n"))
 
 
 (defun term-keys/xterm-args ()
