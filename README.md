@@ -66,9 +66,6 @@ Note that you will need to update the terminal emulator configuration every time
 
 ### urxvt (rxvt-unicode)
 
-`term-keys` includes some supplementary code to aid configuring `urxvt` in the `term-keys-urxvt.el` file;
-evaluate `(require 'term-keys-urxvt)` to load it.
-
 There's two ways to configure `urxvt`: via command-line parameters or X resources.
 Command-line configuration consists in adding the key bindings to the `urxvt` invocation directly.
 You can use `term-keys/urxvt-script` to create a shell script in this manner:
@@ -126,9 +123,6 @@ URxvt.keysym.M-S: builtin-string:
 
 ### xterm
 
-`term-keys` includes some supplementary code to aid configuring `xterm` in the `term-keys-xterm.el` file;
-evaluate `(require 'term-keys-xterm)` to load it.
-
 As with `urxvt`, there's two ways to configure `xterm`: via command-line parameters or X resources.
 Command-line configuration consists in adding the key bindings to the `xterm` invocation directly.
 You can use `term-keys/xterm-script` to create a shell script in this manner:
@@ -179,9 +173,6 @@ You may also want to disable the `eightBitInput` `xterm` option, e.g. with `-xrm
 
 ### Konsole
 
-`term-keys` includes some supplementary code to aid configuring Konsole in the `term-keys-konsole.el` file;
-evaluate `(require 'term-keys-konsole)` to load it.
-
 Konsole provides an interface for adding new and editing existing escape sequences for key combinations 
 (Settings &rarr; Edit current profile... &rarr; Keyboard &rarr; Edit).
 `term-keys` can generate a Konsole keyboard profile according to its settings.
@@ -211,9 +202,6 @@ Yakuake seems to share much with Konsole, and can be configured in the same way.
 See the section above for details.
 
 ### Linux console
-
-`term-keys` includes some supplementary code to aid configuring the Linux console in the `term-keys-linux.el` file;
-evaluate `(require 'term-keys-linux)` to load it.
 
 The Linux console can be customized using `.keymap` files and the `loadkeys` program.
 You can configure it for `term-keys` as follows:
@@ -245,9 +233,6 @@ If you use another layout (AZERTY, Dvorak, Colemak...), you will need to customi
 ### st
 
 [st](https://st.suckless.org/) is configured by editing its `config.h` and recompiling. The key sequences can be configured in this way as well.
-
-`term-keys` includes some supplementary code to aid configuring st in the `term-keys-st.el` file;
-evaluate `(require 'term-keys-st)` to load it.
 
 You can configure st for `term-keys` as follows:
 
