@@ -113,7 +113,9 @@ This function is used for testing and as an example."
 	  (term-keys/urxvt-args)
 	  (list
 	    "-e" (car command-line-args) "-nw"
-	    "--load" (or load-file-name buffer-file-name)
+	    "--load" (concat
+		      (file-name-directory (or load-file-name buffer-file-name))
+		      "term-keys.el")
 	    "--funcall" "term-keys/init"
 	    ))))
 
