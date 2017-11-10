@@ -2,6 +2,23 @@
 
 This package allows configuring Emacs and a supported terminal to support keyboard input involving any combination of keys and modifiers.
 
+## Table of Contents
+
+  * [Introduction](#introduction)
+  * [Configuring Emacs](#configuring-emacs)
+  * [Configuring `term-keys`](#configuring-term-keys)
+  * [Terminal Emulators](#terminal-emulators)
+    * [urxvt (rxvt-unicode)](#urxvt-(rxvt-unicode))
+    * [xterm](#xterm)
+    * [Konsole](#konsole)
+    * [Yakuake](#yakuake)
+    * [Linux console](#linux-console)
+    * [st](#st)
+    * [Unsupported terminals](#unsupported-terminals)
+  * [Similar projects](#similar-projects)
+
+## Introduction
+
 Generally, terminal emulators and applications running in a terminal cannot reliably transmit and receive certain keystrokes (keys in combination with modifiers).
 For some key combinations, there is no consensus on how these events should be encoded on the wire (F-keys and movement keys plus modifiers);
 some other key combinations cannot be represented at all (such as <kbd>Ctrl</kbd><kbd>1</kbd> or <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>A</kbd>).
