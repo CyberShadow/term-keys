@@ -123,6 +123,9 @@ URxvt.keysym.M-S: builtin-string:
 
 ### xterm
 
+`xterm` is configured nearly identically as `urxvt`;
+thus, this section will be very similar to the `urxvt` section above.
+
 As with `urxvt`, there's two ways to configure `xterm`: via command-line parameters or X resources.
 Command-line configuration consists in adding the key bindings to the `xterm` invocation directly.
 You can use `term-keys/xterm-script` to create a shell script in this manner:
