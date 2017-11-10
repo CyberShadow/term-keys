@@ -78,7 +78,7 @@ keyboard).  Although most PC keyboards today only have 12
 function keys, some keyboards/computers had more, and (also for
 the purposes of key binding) the Linux kernel allows registering
 character sequences for as many as 246 function keys (see output
-for 'loadkeys -l' for the exact figure on your machine).
+for 'dumpkeys -l' for the exact figure on your machine).
 Crucially, these virtual keys provide the means to configure
 arbitrary character sequences for any key combination, which is
 necessary for term-keys to work.
