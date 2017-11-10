@@ -1,6 +1,6 @@
 # term-keys - lossless keyboard input for Emacs
 
-This package allows configuring Emacs and a supported terminal to support keyboard input involving any combination of keys and modifiers.
+This package allows configuring Emacs and a supported terminal emulator to handle keyboard input involving any combination of keys and modifiers.
 
 ## Table of Contents
 
