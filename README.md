@@ -126,6 +126,9 @@ URxvt.keysym.M-S: builtin-string:
 `xterm` is configured nearly identically as `urxvt`;
 thus, this section will be very similar to the `urxvt` section above.
 
+Note: `xterm` supports an extended input mode; see `modifyOtherKeys` et al in the `xterm(1)` man page.
+You may find it sufficient for your use case even without `term-keys`.
+
 As with `urxvt`, there's two ways to configure `xterm`: via command-line parameters or X resources.
 Command-line configuration consists in adding the key bindings to the `xterm` invocation directly.
 You can use `term-keys/xterm-script` to create a shell script in this manner:
@@ -296,3 +299,5 @@ These terminals don't (directly) support customizing key bindings, and thus cann
 * [xterm-keybinder](https://github.com/yuutayamada/xterm-keybinder-el) is an Emacs package similar to this one. `term-keys` improves upon xterm-keybinder by supporting more terminals, better documentation, customizability, and extensibility, and improved wire efficiency.
 
 * [notty](https://github.com/withoutboats/notty) is an experimental terminal emulator which also aims at achieving lossless keyboard input by extending the ANSI protocol. `term-keys` does not use notty's protocol because its escape sequence prefix (`^[{`) conflicts with a default Emacs command binding (`backward-paragraph`).
+
+* [Fix Keyboard Input on Terminals](http://www.leonerd.org.uk/hacks/fixterms/) is a proposal to improve input in terminals, which is to some extent implemented in `xterm` and Emacs. Unfortunately, the proposed protocol is vague and incomplete, as it does not cover modifier keys and many PC keyboard keys.
