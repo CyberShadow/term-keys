@@ -1,4 +1,4 @@
-;;; term-keys-linux.el --- term-keys support for the Linux TTY
+;;; term-keys-linux.el --- term-keys support for the Linux console
 
 ;; This file is not part of GNU Emacs.
 
@@ -20,8 +20,8 @@
 ;;; Commentary:
 
 ;; This file contains supplementary code for aiding in the
-;; configuration of the Linux TTY to interoperate with the term-keys
-;; package.
+;; configuration of the Linux console to interoperate with the
+;; term-keys package.
 
 ;; For more information, please see the accompanying README.md file.
 
@@ -32,7 +32,7 @@
 
 
 (defgroup term-keys/linux nil
-  "`term-keys' options for the Linux TTY."
+  "`term-keys' options for the Linux console."
   :group 'term-keys)
 
 
@@ -51,7 +51,7 @@
 
 
 (defcustom term-keys/linux-modifier-map ["Shift" "Control" "Alt" nil nil "AltGr"]
-  "Modifier keys for Linux TTY keymaps.
+  "Modifier keys for Linux console keymaps.
 
 This should be a vector of 6 elements, with each element being a
 string indicating the name of the modifier key corresponding to
@@ -69,11 +69,11 @@ nil indicates that there is no mapping for this modifier."
 
 
 (defcustom term-keys/linux-first-function-key 13
-  "First Linux TTY keymap function key to use for term-keys bindings.
+  "First Linux console keymap function key to use for term-keys bindings.
 
-The Linux TTY allows binding custom character sequences to keys
-only by assigning them to a \"function key\" (named thus after
-the usual F1, F2 etc. function keys found on a computer
+The Linux console allows binding custom character sequences to
+keys only by assigning them to a \"function key\" (named thus
+after the usual F1, F2 etc. function keys found on a computer
 keyboard).  Although most PC keyboards today only have 12
 function keys, some keyboards/computers had more, and (also for
 the purposes of key binding) the Linux kernel allows registering
@@ -95,10 +95,10 @@ F1-F8 keys."
 
 
 (defun term-keys/linux-keymap ()
-  "Construct Linux TTY configuration in the form of a keymap.
+  "Construct Linux console configuration in the form of a keymap.
 
 This function returns, as a string, a keymap which can be used to
-configure the Linux kernel's TTY emulator to encode term-keys key
+configure the Linux kernel's console to encode term-keys key
 sequences, according to the term-keys configuration.
 
 The returned string is suitable to be saved as-is in a .keymap
