@@ -31,6 +31,11 @@
 (require 'term-keys)
 
 
+(defgroup term-keys/konsole nil
+  "`term-keys' options for the Konsole terminal emulator."
+  :group 'term-keys)
+
+
 (define-widget 'term-keys/konsole-modifier 'lazy
   "Choice for Konsole key binding modifiers and state flags."
   :type '(choice (const "Shift")
@@ -63,7 +68,7 @@ for this modifier."
 	  (term-keys/konsole-modifier :tag "Super")
 	  (term-keys/konsole-modifier :tag "Hyper")
 	  (term-keys/konsole-modifier :tag "Alt"))
-  :group 'term-keys)
+  :group 'term-keys/konsole)
 
 
 (defun term-keys/konsole-keytab ()

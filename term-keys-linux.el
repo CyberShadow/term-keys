@@ -31,6 +31,11 @@
 (require 'term-keys)
 
 
+(defgroup term-keys/linux nil
+  "`term-keys' options for the Linux TTY."
+  :group 'term-keys)
+
+
 (define-widget 'term-keys/linux-modifier 'lazy
   "Choice for Linux modifiers for keymap files."
   :type '(choice (const "Shift")
@@ -60,7 +65,7 @@ nil indicates that there is no mapping for this modifier."
 	  (term-keys/linux-modifier :tag "Super")
 	  (term-keys/linux-modifier :tag "Hyper")
 	  (term-keys/linux-modifier :tag "Alt"))
-  :group 'term-keys)
+  :group 'term-keys/linux)
 
 
 (defcustom term-keys/linux-first-function-key 13

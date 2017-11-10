@@ -31,6 +31,11 @@
 (require 'term-keys)
 
 
+(defgroup term-keys/st nil
+  "`term-keys' options for the st terminal emulator."
+  :group 'term-keys)
+
+
 (define-widget 'term-keys/x11-modifier 'lazy
   "Choice for X11 key modifier state flags."
   :type '(choice (const "Shift")
@@ -60,7 +65,7 @@ there is no mapping for this modifier."
 	  (term-keys/x11-modifier :tag "Super")
 	  (term-keys/x11-modifier :tag "Hyper")
 	  (term-keys/x11-modifier :tag "Alt"))
-  :group 'term-keys)
+  :group 'term-keys/st)
 
 
 (defun term-keys/x11-apply-mod-state (key shift lock control mod1 mod2 mod3 mod4 mod5)
