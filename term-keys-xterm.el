@@ -127,6 +127,7 @@ This function is used for testing and as an example."
 	 (append
 	  (term-keys/xterm-args)
 	  (list
+	   "-xrm" "XTerm*eightBitInput: false"
 	    "-e" (car command-line-args) "-nw"
 	    "--load" (concat
 		      (file-name-directory (or load-file-name buffer-file-name))
