@@ -240,8 +240,8 @@ instead."
       ;; https://lists.gnu.org/archive/html/bug-gnu-emacs/2004-03/msg00306.html
       (and (string-equal key "g") control meta)
 
-      ;; Navigation keys and Control
-      (and (member key '("Up" "Down" "Left" "Right" "Home" "End" "Prior" "Next")) control (or shift meta))
+      ;; Navigation keys and Control/Alt
+      (and (member key '("Up" "Down" "Left" "Right" "Home" "End" "Prior" "Next")) (or meta (and control shift)))
 
       ;; S-PgUp/PgDn - usually used for scrolling the terminal, but not useful in Emacs
       (and (member key '("Prior" "Next")) shift)
