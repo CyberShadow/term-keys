@@ -246,17 +246,20 @@ instead."
       ;; S-PgUp/PgDn - usually used for scrolling the terminal, but not useful in Emacs
       (and (member key '("Prior" "Next")) shift)
 
-      ;; Ctrl+Tab
-      (and (string-equal key "Tab") control)
-
-      ;; Ctrl+BackSpace
-      (and (string-equal key "BackSpace") control)
-
       ;; C-S-x is unrepresentable for letters
       (and (string-match-p "^[a-z]$" key) control shift)
 
       ;; C-x is unrepresentable for digits
       (and (string-match-p "^[0-9]$" key) control)
+
+      ;; ...as well as punctuation and some special characters
+      (and (member key '("Return" "Tab" "BackSpace"
+			 "grave" "minus" "equal" "bracketleft" "bracketright" "semicolon"
+			 "apostrophe" "backslash" "comma" "period" "slash" "space"))
+	   control)
+
+      ;; Shift + special chars
+      (and (member key '("Return" "BackSpace")) shift)
 
       ;; Menu (Apps) key
       (string-equal key "Menu")
