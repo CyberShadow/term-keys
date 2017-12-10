@@ -5,16 +5,18 @@ This package allows configuring Emacs and a supported terminal emulator to handl
 ## Table of Contents
 
   * [Introduction](#introduction)
-  * [Configuring Emacs](#configuring-emacs)
-  * [Configuring `term-keys`](#configuring-term-keys)
-  * [Terminal Emulators](#terminal-emulators)
-    * [urxvt (rxvt-unicode)](#urxvt-rxvt-unicode)
-    * [xterm](#xterm)
-    * [Konsole](#konsole)
-    * [Yakuake](#yakuake)
-    * [Linux console](#linux-console)
-    * [st](#st)
-    * [Unsupported terminals](#unsupported-terminals)
+  * [Installation](#installation)
+  * [Setup](#setup)
+    * [Configuring Emacs](#configuring-emacs)
+    * [Configuring `term-keys`](#configuring-term-keys)
+    * [Terminal Emulators](#terminal-emulators)
+      * [urxvt (rxvt-unicode)](#urxvt-rxvt-unicode)
+      * [xterm](#xterm)
+      * [Konsole](#konsole)
+      * [Yakuake](#yakuake)
+      * [Linux console](#linux-console)
+      * [st](#st)
+      * [Unsupported terminals](#unsupported-terminals)
   * [Similar projects](#similar-projects)
 
 ## Introduction
@@ -26,6 +28,20 @@ This can be an impediment for Emacs users, especially when you've already config
 
 The `term-keys` package allows solving this problem by giving these key combinations a custom, unique encoding, overcoming the limitations of the protocol implemented by the terminal emulators.
 
+## Installation
+
+To install `term-keys`, first add my ELPA package archive. Add this to your `init.el` and evaluate it:
+
+```elisp
+(require 'package) ; you may already have this line
+(add-to-list 'package-archives
+             '("cselpa" . "https://elpa.thecybershadow.net/packages/"))
+```
+
+Then, install it like any ELPA package (<kbd>M-x</kbd>`package-install`<kbd>RET</kbd>`term-keys`).
+
+## Setup
+
 Setting up `term-keys` is a three-part process:
 
 1. Configure Emacs;
@@ -34,7 +50,7 @@ Setting up `term-keys` is a three-part process:
 
 See the sections below for more information.
 
-## Configuring Emacs
+### Configuring Emacs
 
 Setting up `term-keys` is as easy as:
 
@@ -46,7 +62,7 @@ Setting up `term-keys` is as easy as:
 This will automatically set up current and new TTY frames to decode `term-keys` key sequences.
 If you prefer to enable it for each frame manually, you can do so by invoking `(term-keys/init)`.
 
-## Configuring `term-keys`
+### Configuring `term-keys`
 
 `term-keys` is very configurable. Most things can be changed via Emacs' `customize` interface - use <kbd>M-x</kbd>`customize-group`<kbd>RET</kbd>`term-keys` to access it.
 
@@ -58,13 +74,13 @@ The only part of `term-keys` which cannot be configured via the `customize` inte
 For this purpose, `term-keys` allows specifying the name of a function to invoke, which shall implement this logic.
 See the documentation of `term-keys/want-key-p-func` and `term-keys/want-key-p-def` (as well as the definition of the latter) for more information.
 
-## Terminal Emulators
+### Terminal Emulators
 
 Each terminal emulator has its own method of configuration. Consult the section corresponding to your terminal emulator of choice below.
 
 Note that you will need to update the terminal emulator configuration every time you change the `term-keys` configuration.
 
-### urxvt (rxvt-unicode)
+#### urxvt (rxvt-unicode)
 
 There's two ways to configure `urxvt`: via command-line parameters or X resources.
 Command-line configuration consists in adding the key bindings to the `urxvt` invocation directly.
@@ -121,7 +137,7 @@ URxvt.keysym.Shift-Insert: builtin-string:
 URxvt.keysym.M-S: builtin-string:
 ```
 
-### xterm
+#### xterm
 
 `xterm` is configured nearly identically as `urxvt`;
 thus, this section will be very similar to the `urxvt` section above.
@@ -177,7 +193,7 @@ See the `term-keys/xterm-*` definitions for more xterm-specific help code.
 
 You may also want to disable the `eightBitInput` `xterm` option, e.g. with `-xrm 'XTerm*eightBitInput: false'`.
 
-### Konsole
+#### Konsole
 
 Konsole provides an interface for adding new and editing existing escape sequences for key combinations 
 (Settings &rarr; Edit current profile... &rarr; Keyboard &rarr; Edit).
@@ -202,12 +218,12 @@ You can customize the mapping of Konsole (Qt) modifiers to Emacs modifiers using
 You may also want to disable some default Konsole shortcuts (Settings &rarr; Configure Shortcuts...),
 as they may interfere with standard Emacs commands.
 
-### Yakuake
+#### Yakuake
 
 Yakuake seems to share much with Konsole, and can be configured in the same way.
 See the section above for details.
 
-### Linux console
+#### Linux console
 
 The Linux console can be customized using `.keymap` files and the `loadkeys` program.
 You can configure it for `term-keys` as follows:
@@ -240,7 +256,7 @@ If you use another layout (AZERTY, Dvorak, Colemak...), you will need to customi
 
 Note also that Linux has a limitation on the number of customized keys. Custom key strings need to be assigned to "function keys", for which there are 256 slots by default (which includes the default strings for the F-keys and some other keys like Insert/Delete). This leaves about 234 slots for `term-keys`, which is sufficient for the default configuration, but may not be sufficient for a custom one, especially if you enable support for additional modifiers.
 
-### st
+#### st
 
 [st](https://st.suckless.org/) is configured by editing its `config.h` and recompiling. The key sequences can be configured in this way as well.
 
@@ -282,7 +298,7 @@ You can configure st for `term-keys` as follows:
 
 You can customize st's mapping of X11 modifiers to Emacs modifiers in the generated configuration using the respective `customize` group, i.e.: <kbd>M-:</kbd>`(progn (require 'term-keys-st) (customize-group 'term-keys/st))`
 
-### Unsupported terminals
+#### Unsupported terminals
 
 These terminals don't (directly) support customizing key bindings, and thus cannot be used with `term-keys`:
 
