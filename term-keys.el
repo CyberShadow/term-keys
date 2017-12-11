@@ -48,96 +48,96 @@ file."
 
 
 (defcustom term-keys/mapping
-  '(["<escape>"		"Escape"	1	"Esc"		]
-    ["<f1>"		"F1"		59	"F1"		]
-    ["<f2>"		"F2"		60	"F2"		]
-    ["<f3>"		"F3"		61	"F3"		]
-    ["<f4>"		"F4"		62	"F4"		]
-    ["<f5>"		"F5"		63	"F5"		]
-    ["<f6>"		"F6"		64	"F6"		]
-    ["<f7>"		"F7"		65	"F7"		]
-    ["<f8>"		"F8"		66	"F8"		]
-    ["<f9>"		"F9"		67	"F9"		]
-    ["<f10>"		"F10"		68	"F10"		]
-    ["<f11>"		"F11"		87	"F11"		]
-    ["<f12>"		"F12"		88	"F12"		]
-    ["<print>"		"Print"		99	"Print"		]
-    ["<Scroll_Lock>"	"Scroll_Lock"	70	"ScrollLock"	]
-    ["<pause>"		"Pause"		119	"Pause"		]
+  '(["<escape>"		"Escape"	1	"Esc"		#x001B	]
+    ["<f1>"		"F1"		59	"F1"		#xF704	]
+    ["<f2>"		"F2"		60	"F2"		#xF705	]
+    ["<f3>"		"F3"		61	"F3"		#xF706	]
+    ["<f4>"		"F4"		62	"F4"		#xF707	]
+    ["<f5>"		"F5"		63	"F5"		#xF708	]
+    ["<f6>"		"F6"		64	"F6"		#xF709	]
+    ["<f7>"		"F7"		65	"F7"		#xF70A	]
+    ["<f8>"		"F8"		66	"F8"		#xF70B	]
+    ["<f9>"		"F9"		67	"F9"		#xF70C	]
+    ["<f10>"		"F10"		68	"F10"		#xF70D	]
+    ["<f11>"		"F11"		87	"F11"		#xF70E	]
+    ["<f12>"		"F12"		88	"F12"		#xF70F	]
+    ["<print>"		"Print"		99	"Print"		#xF710	]
+    ["<Scroll_Lock>"	"Scroll_Lock"	70	"ScrollLock"	nil	]
+    ["<pause>"		"Pause"		119	"Pause"		nil	]
 
-    ["`"		"grave"		43	"`"		]
-    ["1"		"1"		2	"1"		]
-    ["2"		"2"		3	"2"		]
-    ["3"		"3"		4	"3"		]
-    ["4"		"4"		5	"4"		]
-    ["5"		"5"		6	"5"		]
-    ["6"		"6"		7	"6"		]
-    ["7"		"7"		8	"7"		]
-    ["8"		"8"		9	"8"		]
-    ["9"		"9"		10	"9"		]
-    ["0"		"0"		11	"0"		]
-    ["-"		"minus"		12	"-"		]
-    ["="		"equal"		13	"="		]
-    ["<backspace>"	"BackSpace"	14	"Backspace"	]
-    ["<tab>"		"Tab"		15	"Tab"		]
-    ["q"		"q"		16	"Q"		]
-    ["w"		"w"		17	"W"		]
-    ["e"		"e"		18	"E"		]
-    ["r"		"r"		19	"R"		]
-    ["t"		"t"		20	"T"		]
-    ["y"		"y"		21	"Y"		]
-    ["u"		"u"		22	"U"		]
-    ["i"		"i"		23	"I"		]
-    ["o"		"o"		24	"O"		]
-    ["p"		"p"		25	"P"		]
-    ["["		"bracketleft"	26	"["		]
-    ["]"		"bracketright"	27	"]"		]
-    ["<return>"		"Return"	28	"Return"	]
-    ["<Caps_Lock>"	"Caps_Lock"	58	"CapsLock"	]
-    ["a"		"a"		30	"A"		]
-    ["s"		"s"		31	"S"		]
-    ["d"		"d"		32	"D"		]
-    ["f"		"f"		33	"F"		]
-    ["g"		"g"		34	"G"		]
-    ["h"		"h"		35	"H"		]
-    ["j"		"j"		36	"J"		]
-    ["k"		"k"		37	"K"		]
-    ["l"		"l"		38	"L"		]
-    [";"		"semicolon"	39	";"		]
-    ["'"		"apostrophe"	40	"'"		]
-    [nil		"Shift_L"	42	"Shift"		]
-    ["\\"		"backslash"	43	"\\"		]
-    ["z"		"z"		44	"Z"		]
-    ["x"		"x"		45	"X"		]
-    ["c"		"c"		46	"C"		]
-    ["v"		"v"		47	"V"		]
-    ["b"		"b"		48	"B"		]
-    ["n"		"n"		49	"N"		]
-    ["m"		"m"		50	"M"		]
-    [","		"comma"		51	","		]
-    ["."		"period"	52	"."		]
-    ["/"		"slash"		53	"/"		]
-    [nil		"Shift_R"	54	"Shift"		]
-    [nil		"Ctrl_L"	29	"Ctrl"		]
-    [nil		"Super_L"	125	"Meta"		]
-    [nil		"Alt_L"		56	"Alt"		]
-    ["SPC"		"space"		57	"Space"		]
-    [nil		"Alt_R"		100	"Alt"		]
-    [nil		"Super_R"	126	"Meta"		]
-    ["<menu>"		"Menu"		127	"Menu"		]
-    [nil		"Ctrl_R"	97	"Ctrl"		]
+    ["`"		"grave"		43	"`"		?`	]
+    ["1"		"1"		2	"1"		?1	]
+    ["2"		"2"		3	"2"		?2	]
+    ["3"		"3"		4	"3"		?3	]
+    ["4"		"4"		5	"4"		?4	]
+    ["5"		"5"		6	"5"		?5	]
+    ["6"		"6"		7	"6"		?6	]
+    ["7"		"7"		8	"7"		?7	]
+    ["8"		"8"		9	"8"		?8	]
+    ["9"		"9"		10	"9"		?9	]
+    ["0"		"0"		11	"0"		?0	]
+    ["-"		"minus"		12	"-"		?-	]
+    ["="		"equal"		13	"="		?=	]
+    ["<backspace>"	"BackSpace"	14	"Backspace"	#x007F	]
+    ["<tab>"		"Tab"		15	"Tab"		#x0009	]
+    ["q"		"q"		16	"Q"		?q	]
+    ["w"		"w"		17	"W"		?w	]
+    ["e"		"e"		18	"E"		?e	]
+    ["r"		"r"		19	"R"		?r	]
+    ["t"		"t"		20	"T"		?t	]
+    ["y"		"y"		21	"Y"		?y	]
+    ["u"		"u"		22	"U"		?u	]
+    ["i"		"i"		23	"I"		?i	]
+    ["o"		"o"		24	"O"		?o	]
+    ["p"		"p"		25	"P"		?p	]
+    ["["		"bracketleft"	26	"["		?[	]
+    ["]"		"bracketright"	27	"]"		?]	]
+    ["<return>"		"Return"	28	"Return"	#x000D	]
+    ["<Caps_Lock>"	"Caps_Lock"	58	"CapsLock"	nil	]
+    ["a"		"a"		30	"A"		?a	]
+    ["s"		"s"		31	"S"		?s	]
+    ["d"		"d"		32	"D"		?d	]
+    ["f"		"f"		33	"F"		?f	]
+    ["g"		"g"		34	"G"		?g	]
+    ["h"		"h"		35	"H"		?h	]
+    ["j"		"j"		36	"J"		?j	]
+    ["k"		"k"		37	"K"		?k	]
+    ["l"		"l"		38	"L"		?l	]
+    [";"		"semicolon"	39	";"		?\;	]
+    ["'"		"apostrophe"	40	"'"		?'	]
+    [nil		"Shift_L"	42	"Shift"		nil	]
+    ["\\"		"backslash"	43	"\\"		?\\	]
+    ["z"		"z"		44	"Z"		?z	]
+    ["x"		"x"		45	"X"		?x	]
+    ["c"		"c"		46	"C"		?c	]
+    ["v"		"v"		47	"V"		?v	]
+    ["b"		"b"		48	"B"		?b	]
+    ["n"		"n"		49	"N"		?n	]
+    ["m"		"m"		50	"M"		?m	]
+    [","		"comma"		51	","		?,	]
+    ["."		"period"	52	"."		?.	]
+    ["/"		"slash"		53	"/"		?/	]
+    [nil		"Shift_R"	54	"Shift"		nil	]
+    [nil		"Ctrl_L"	29	"Ctrl"		nil	]
+    [nil		"Super_L"	125	"Meta"		nil	]
+    [nil		"Alt_L"		56	"Alt"		nil	]
+    ["SPC"		"space"		57	"Space"		#x0020	]
+    [nil		"Alt_R"		100	"Alt"		nil	]
+    [nil		"Super_R"	126	"Meta"		nil	]
+    ["<menu>"		"Menu"		127	"Menu"		#x0010	]
+    [nil		"Ctrl_R"	97	"Ctrl"		nil	]
 
-    ["<up>"		"Up"		103	"Up"		]
-    ["<down>"		"Down"		108	"Down"		]
-    ["<left>"		"Left"		105	"Left"		]
-    ["<right>"		"Right"		106	"Right"		]
+    ["<up>"		"Up"		103	"Up"		#xF700	]
+    ["<down>"		"Down"		108	"Down"		#xF701	]
+    ["<left>"		"Left"		105	"Left"		#xF702	]
+    ["<right>"		"Right"		106	"Right"		#xF703	]
 
-    ["<insert>"		"Insert"	110	"Ins"		]
-    ["<delete>"		"Delete"	111	"Del"		]
-    ["<home>"		"Home"		102	"Home"		]
-    ["<end>"		"End"		107	"End"		]
-    ["<prior>"		"Prior"		104	"PgUp"		]
-    ["<next>"		"Next"		109	"PgDown"	]
+    ["<insert>"		"Insert"	110	"Ins"		#xF746	]
+    ["<delete>"		"Delete"	111	"Del"		#xF728	]
+    ["<home>"		"Home"		102	"Home"		#xF729	]
+    ["<end>"		"End"		107	"End"		#xF72B	]
+    ["<prior>"		"Prior"		104	"PgUp"		#xF72C	]
+    ["<next>"		"Next"		109	"PgDown"	#xF72D	]
 
     ;; Add new entries at the end of the list, to avoid disrupting
     ;; existing configurations.
@@ -146,7 +146,7 @@ file."
     )
   "List of keys supported by the `term-keys' package.
 
-Each item in the list is a 4-element vector:
+Each item in the list is a 5-element vector:
 
 The first element is the Emacs key name, as it occurs in
 `describe-key' or `kbd'.  nil can be used to indicate keys which
@@ -164,7 +164,12 @@ in a TTY.
 The fourth element is the Qt key name, as returned by
 QKeySequence::toString and accepted by QKeySequence::fromString.
 An easy way to obtain their name is using any KDE application's
-\"Configure Shortcuts\" dialog."
+\"Configure Shortcuts\" dialog.
+
+The fifth element is the Unicode character code emitted by the
+key on macOS.  The program \"Key Codes\" by developer \"Many
+Tricks\" (available on the OS App Store) can display these
+values."
   :type '(repeat
 	  (vector
 	   :tag "Key mapping"
@@ -180,7 +185,14 @@ An easy way to obtain their name is using any KDE application's
 	   (integer
 	    :tag "Linux TTY keynumber")
 	   (string
-	    :tag "Qt key name")))
+	    :tag "Qt key name")
+	   (choice
+	    :tag "macOS Unicode character code"
+	    (const
+	     :tag "None"
+	     nil)
+	    (integer
+	     :tag "Character code"))))
   :group 'term-keys)
 
 

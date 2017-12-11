@@ -16,6 +16,7 @@ This package allows configuring Emacs and a supported terminal emulator to handl
       * [Yakuake](#yakuake)
       * [Linux console](#linux-console)
       * [st](#st)
+      * [macOS Terminal](#macos-terminal)
       * [Unsupported terminals](#unsupported-terminals)
   * [Similar projects](#similar-projects)
 
@@ -297,6 +298,39 @@ You can configure st for `term-keys` as follows:
 5. Rebuild st.
 
 You can customize st's mapping of X11 modifiers to Emacs modifiers in the generated configuration using the respective `customize` group, i.e.: <kbd>M-:</kbd>`(progn (require 'term-keys-st) (customize-group 'term-keys/st))`
+
+#### macOS Terminal
+
+The standard macOS Terminal.app allows, to a certain extent, customizing escape sequences sent by key combinations
+(Terminal &rarr; Preferences... &rarr; Profiles &rarr; (select a profile) &rarr; Keyboard).
+`term-keys` can generate a configuration XML file, which can be injected into Terminal.app's preferences plist file.
+
+To do so:
+
+1. Create a new profile. Name it e.g. `Emacs`.
+2. Enable the "Use Option as Meta key" option on the Keyboard tab.
+3. Export the `term-keys` keymap XML file:
+
+   ```elisp
+   (require 'term-keys-terminal-app)
+   (with-temp-buffer
+     (insert (term-keys/terminal-app-keymap-xml))
+     (append-to-file (point-min) (point-max) "~/term-keys.xml"))
+   ```
+
+4. Import the keymap into Terminal.app's preferences file:
+
+   ```bash
+   $ plutil -replace 'Window Settings.Emacs.keyMapBoundKeys' \
+       -xml "$(cat ~/term-keys.xml)" \
+       ~/Library/Preferences/com.apple.Terminal.plist
+   ```
+
+   (If you named your profile something other than `Emacs`, substitute its name in the command above.)
+
+5. Restart Terminal.app.
+
+You can customize the mapping of Terminal.app modifiers to Emacs modifiers using the respective `customize` group, i.e.: <kbd>M-:</kbd>`(progn (require 'term-keys-terminal-app) (customize-group 'term-keys/terminal-app))`
 
 #### Unsupported terminals
 
