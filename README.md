@@ -234,7 +234,7 @@ You can configure it for `term-keys` as follows:
    (require 'term-keys-linux)
    (with-temp-buffer
 	 (insert (term-keys/linux-keymap))
-	 (append-to-file (point-min) (point-max) "~/term-keys.keymap"))
+	 (write-region (point-min) (point-max) "~/term-keys.keymap"))
    ```
 
 2. Load the created `.keymap` file:
