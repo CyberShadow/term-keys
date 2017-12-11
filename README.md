@@ -330,6 +330,11 @@ To do so:
 
 5. Restart Terminal.app.
 
+Note that the application's settings UI only allows configuring a small set of keys.
+This limitation does not carry over to the underlying configuration file format, and thus does not apply to `term-keys` -
+the generated keymap file will contain definitions for all keys that generate a Unicode key code on macOS.
+These entries will appear (displayed with the key's hex code instead of the key name) in the terminal emulator's configuration, but cannot be edited there.
+
 You can customize the mapping of Terminal.app modifiers to Emacs modifiers using the respective `customize` group, i.e.: <kbd>M-:</kbd>`(progn (require 'term-keys-terminal-app) (customize-group 'term-keys/terminal-app))`
 
 #### Unsupported terminals
