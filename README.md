@@ -265,7 +265,7 @@ You can configure st for `term-keys` as follows:
 1. Generate the initial `config.h`, e.g. by building `st` once.
 2. Use the `term-keys/st-config-*` functions to create header files:
 
-   ```
+   ```elisp
    (require 'term-keys-st)
    ;; Assuming st is checked out in ~/st
    (with-temp-buffer
