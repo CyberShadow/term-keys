@@ -357,3 +357,5 @@ These terminals don't (directly) support customizing key bindings, and thus cann
 * [notty](https://github.com/withoutboats/notty) is an experimental terminal emulator which also aims at achieving lossless keyboard input by extending the ANSI protocol. `term-keys` does not use notty's protocol because its escape sequence prefix (`^[{`) conflicts with a default Emacs command binding (`backward-paragraph`).
 
 * [Fix Keyboard Input on Terminals](http://www.leonerd.org.uk/hacks/fixterms/) is a proposal to improve input in terminals, which is to some extent implemented in `xterm` and Emacs. Unfortunately, the proposed protocol is vague and incomplete, as it does not cover modifier keys and many PC keyboard keys.
+
+* The [Kitty terminal emulator](https://github.com/kovidgoyal/kitty) (the one written in Python, not [the PuTTY fork](http://www.9bis.net/kitty/)) implements [its own protocol extensions for keyboard handling](https://github.com/kovidgoyal/kitty/blob/master/protocol-extensions.asciidoc#keyboard-handling).
