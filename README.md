@@ -202,7 +202,9 @@ Konsole provides an interface for adding new and editing existing escape sequenc
 
 To do so:
 
-1. Create a new keyboard profile. Name it e.g. `Emacs`.
+1. Create a new keyboard profile, based on the default one.  
+   (Select "Default (XFree 4)", and click "New...".)  
+   Name it e.g. `Emacs`.
 2. Append the output of `term-keys/konsole-keytab` to the newly created `.keytab` file, e.g.:
 
    ```elisp
