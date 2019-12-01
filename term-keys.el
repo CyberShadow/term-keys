@@ -255,7 +255,7 @@ instead."
       ;; Navigation keys and Control/Alt
       (and (member key '("Up" "Down" "Left" "Right" "Home" "End" "Prior" "Next")) (or meta (and control shift)))
 
-      ;; S-PgUp/PgDn - usually used for scrolling the terminal, but not useful in Emacs
+      ;; S-PgUp/PgDn - usually used for scrolling the terminal, which is not useful in Emacs
       (and (member key '("Prior" "Next")) shift)
 
       ;; C-S-x is unrepresentable for letters
