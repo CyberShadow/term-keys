@@ -139,7 +139,7 @@ just one half of the necessary configuration (see
 					 (and (elt mods n)
 					      (not (elt term-keys/x11-modifier-map n))))
 				       (number-sequence 0 (1- (length mods))))) ; 0..5
-	      (format "{ XK_%-16s, %-40s, \"%s\", 0, 0, 0},\n"
+	      (format "{ XK_%-16s, %-40s, \"%s\", 0, 0},\n"
 		      (term-keys/x11-apply-mods (elt keymap 1) mods) ; X11 key name
 		      (if (cl-reduce (lambda (x y) (or x y)) mods)
 			  (mapconcat
