@@ -276,7 +276,7 @@ You can configure st for `term-keys` as follows:
 	 (write-region (point-min) (point-max) "~/st/config-term-keys-key.h"))
    (with-temp-buffer
 	 (insert (term-keys/st-config-mappedkeys))
-	 (write-region (point-min) (point-max) "~/st/config-term-keys-mappedkeys.h")))
+	 (write-region (point-min) (point-max) "~/st/config-term-keys-mappedkeys.h"))
    ```
 
 3. Update the definition of `mappedkeys` in `config.h` as follows:
