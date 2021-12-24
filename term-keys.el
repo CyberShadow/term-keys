@@ -382,6 +382,18 @@ Collect FUN's return values in a list and return it."
 (defun term-keys/init ()
   "Set up configured key sequences for the current terminal."
   (interactive)
+
+  ;; Hack for Emacs 28 and higher.
+  ;; TODO: We want to remove this binding only from the input decode
+  ;; step - it should still be accessible via the term-keys protocol.
+  (let ((prefix-bind (key-binding term-keys/prefix)))
+    (when prefix-bind
+      (message "term-keys: term-keys/prefix (%S) is already bound to %s (as %s) - unbinding"
+               term-keys/prefix
+               prefix-bind
+               (key-description term-keys/prefix))
+      (global-unset-key term-keys/prefix)))
+
   (term-keys/iterate-keys
    (lambda (index keymap mods)
      (define-key
