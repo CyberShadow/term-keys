@@ -86,7 +86,7 @@ return the KeySym that would be received by the application if
 SHIFT, LOCK, CONTROL, MOD1, MOD2, MOD3, MOD4 and MOD5 modifier
 flags are respectively active."
   (or
-   (and shift (elt keymap 5))
+   (and shift (elt keymap 6))
    (elt keymap 1)))
 
 

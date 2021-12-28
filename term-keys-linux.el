@@ -117,7 +117,7 @@ file and loaded by the loadkeys program."
 		(prog1
 		    (format "# %s\n%s\tkeycode %3d = F%d\nstring F%d = \"%s\"\n\n"
 			    ;; Emacs key name for comment
-			    (term-keys/format-key (elt keymap 0) mods)
+			    (term-keys/format-key keymap mods)
 
 			    (if (cl-reduce (lambda (x y) (or x y)) mods)
 				;; tab-separated mod list
