@@ -48,12 +48,7 @@ just one half of the necessary configuration (see
 	 (term-keys/iterate-keys
 	  (lambda (index keymap mods)
 
-	    ;; Skip key combinations with unrepresentable modifiers
-	    (unless (cl-reduce (lambda (x y) (or x y)) ; any
-			       (mapcar (lambda (n) ; active modifier mapped to nil
-					 (and (elt mods n)
-					      (not (elt term-keys/x11-modifier-map n))))
-				       (number-sequence 0 (1- (length mods))))) ; 0..5
+	    (when (term-keys/x11-key-representable keymap mods)
 	      (format "{ XK_%-16s, %-40s, \"%s\", 0, 0},\n"
 		      (term-keys/x11-apply-mods keymap mods) ; X11 key name
 		      (if (cl-reduce (lambda (x y) (or x y)) mods)

@@ -65,6 +65,18 @@ that there is no mapping for this modifier."
   :group 'term-keys/x11)
 
 
+(defun term-keys/x11-key-representable (keymap mods)
+  "Return non-nil if the given KEYMAP + MODS vector is representable in X11."
+  (and
+   (elt keymap 1)                     ; Have X11 keysym?
+   ;; Skip key combinations with unrepresentable modifiers
+   (cl-reduce (lambda (x y) (and x y)) ; all
+	      (mapcar (lambda (n)
+			(or (not (elt mods n)) ; inactive modifier
+			    (elt term-keys/x11-modifier-map n))) ; mapped
+		      (number-sequence 0 (1- (length mods))))))) ; 0..5
+
+
 (defun term-keys/x11-apply-mod-state (keymap shift lock control mod1 mod2 mod3 mod4 mod5)
   "Apply modifier state flags to an X11 KeySym.
 
