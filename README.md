@@ -299,7 +299,7 @@ You can configure st for `term-keys` as follows:
 
 5. Rebuild st.
 
-You can customize st's mapping of X11 modifiers to Emacs modifiers in the generated configuration using the respective `customize` group, i.e.: <kbd>M-:</kbd>`(progn (require 'term-keys-st) (customize-group 'term-keys/st))`
+You can customize st's mapping of X11 modifiers to Emacs modifiers in the generated configuration using the respective `customize` group, i.e.: <kbd>M-:</kbd>`(progn (require 'term-keys-st) (customize-group 'term-keys/x11))`
 
 #### macOS Terminal
 
