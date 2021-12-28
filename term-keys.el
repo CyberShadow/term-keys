@@ -308,7 +308,7 @@ change which key combinations to encode."
 
 
 (defun term-keys/format-key (key mods)
-  "Format key modifiers in Emacs/urxvt syntax.
+  "Format key modifiers in Emacs syntax.
 
 Returns KEY prepended with S-, C-, M-, s-, H-, or A- depending on
 the elements of the bool vector MODS are correspondingly

@@ -29,24 +29,53 @@
 
 
 (require 'term-keys)
+(require 'term-keys-x11)
 
 
-(defun term-keys/urxvt-format-key (key mods)
+(defun term-keys/urxvt-format-mods (mods)
+  "Format modifiers into an urxvt prefix,
+
+Performs translation according to `term-keys/x11-modifier-map',
+and rxvt's keysym_vocabulary.  To minimize the length of the
+resulting command line, the shortest prefix is used."
+  (mapconcat
+     (lambda (n)
+       (if (elt mods n)
+	   (pcase (downcase (elt term-keys/x11-modifier-map n))
+	     ("shift"     "S-")
+	     ("lock"      "L-")
+	     ("control"   "C-")
+	     ("mod1"      "1-")
+	     ("mod2"      "2-")
+	     ("mod3"      "3-")
+	     ("mod4"      "4-")
+	     ("mod5"      "5-")
+	     ;; These are private to urxvt:
+	     ("meta"      "M-")
+	     ("numlock"   "N-")
+	     ("appkeypad" "K-")
+	     ("level3"    "I-")
+	     ;; Should be filtered ahead of time, using `term-keys/x11-key-representable'
+	     ('nil (error "Unsupported modifier: #%d" n))
+	     (_ (error "Unknown modifier: %s" (elt term-keys/x11-modifier-map n))))
+	 ""))
+     (number-sequence 0 (1- (length mods)))
+     ""))
+
+
+(defun term-keys/urxvt-format-key (keymap mods)
   "Format key modifiers in urxvt syntax.
 
-Returns KEY prepended with S-, C-, M-, s-, H-, or A- depending on
-the elements of the bool vector MODS are correspondingly non-nil,
-additionally upcasing letter keys."
-  (if (and (elt mods 0)                 ; Shift
-	   (string-match-p "^[a-z]$" key))
-      ;; Upcase letter keys
-      (term-keys/format-key (upcase key) (bool-vector nil
-						      (elt mods 1)
-						      (elt mods 2)
-						      (elt mods 3)
-						      (elt mods 4)
-						      (elt mods 5)))
-    (term-keys/format-key key mods)))
+Returns key (given in KEYMAP, a `term-keys/mapping' row)
+prepended with appropriate modifiers depending on the elements of the bool vector
+MODS, and performing translation as necessary.
+
+If the KEY with MODS is unrepresentable, return nil."
+
+  (when (term-keys/x11-key-representable keymap mods)
+    (concat
+     (term-keys/urxvt-format-mods mods)
+     (term-keys/x11-apply-mods keymap mods))))
 
 
 (defun term-keys/urxvt-args ()
@@ -61,7 +90,7 @@ key sequences, according to the term-keys configuration."
 	    (list
 	     (concat
 	      "-keysym."
-	      (term-keys/urxvt-format-key (elt keymap 1) mods))
+	      (term-keys/urxvt-format-key keymap mods))
 	     (concat
 	      "string:"
 	      term-keys/prefix
@@ -98,7 +127,7 @@ The returned string is suitable to be added as-is to an
 	 (term-keys/iterate-keys
 	  (lambda (index keymap mods)
 	    (format "URxvt.keysym.%s: string:%s%s%s\n"
-		    (term-keys/urxvt-format-key (elt keymap 1) mods)
+		    (term-keys/urxvt-format-key keymap mods)
 		    term-keys/prefix
 		    (term-keys/encode-key index mods)
 		    term-keys/suffix)))))
