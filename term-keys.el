@@ -148,28 +148,26 @@ file."
 
 Each item in the list is a 5-element vector:
 
-The first element is the Emacs key name, as it occurs in
-`describe-key' or `kbd'.  nil can be used to indicate keys which
-Emacs currently does not recognize (but are still known by other
-input systems), such as modifier keys (which Emacs can't process
-on its own, only in combination with a non-modifier key).
+0: The Emacs key name, as it occurs in `describe-key' or `kbd'.
+   nil can be used to indicate keys which Emacs currently does
+   not recognize (but are still known by other input systems),
+   such as modifier keys (which Emacs can't process on its own,
+   only in combination with a non-modifier key).
 
-The second element is the X11 KeySym name, as returned by
-XKeysymToString.  Used for urxvt/xterm configuration.
+1: The X11 KeySym name, as returned by XKeysymToString.  Used for
+   urxvt/xterm configuration.
 
-The third element is the keynumber (keycode) from the Linux TTY.
-You can obtain a key's keynumber by running the 'showkey' program
-in a TTY.
+2: The keynumber (keycode) from the Linux TTY.  You can obtain a
+   key's keynumber by running the 'showkey' program in a TTY.
 
-The fourth element is the Qt key name, as returned by
-QKeySequence::toString and accepted by QKeySequence::fromString.
-An easy way to obtain their name is using any KDE application's
-\"Configure Shortcuts\" dialog.
+3: The Qt key name, as returned by QKeySequence::toString and
+   accepted by QKeySequence::fromString.  An easy way to obtain
+   their name is using any KDE application's \"Configure
+   Shortcuts\" dialog.
 
-The fifth element is the Unicode character code emitted by the
-key on macOS.  The program \"Key Codes\" by developer \"Many
-Tricks\" (available on the OS App Store) can display these
-values."
+4: The Unicode character code emitted by the key on macOS.  The
+   program \"Key Codes\" by developer \"Many Tricks\" (available
+   on the OS App Store) can display these values.
   :type '(repeat
 	  (vector
 	   :tag "Key mapping"
