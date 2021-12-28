@@ -55,7 +55,7 @@ just one half of the necessary configuration (see
 					      (not (elt term-keys/x11-modifier-map n))))
 				       (number-sequence 0 (1- (length mods))))) ; 0..5
 	      (format "{ XK_%-16s, %-40s, \"%s\", 0, 0},\n"
-		      (term-keys/x11-apply-mods (elt keymap 1) mods) ; X11 key name
+		      (term-keys/x11-apply-mods keymap mods) ; X11 key name
 		      (if (cl-reduce (lambda (x y) (or x y)) mods)
 			  (mapconcat
 			   (lambda (n)
@@ -94,7 +94,7 @@ half)."
 	  (term-keys/iterate-keys
 	   (lambda (index keymap mods)
 	     (format "XK_%s,\n"
-		     (term-keys/x11-apply-mods (elt keymap 1) mods)))))))
+		     (term-keys/x11-apply-mods keymap mods)))))))
 
 
 (provide 'term-keys-st)

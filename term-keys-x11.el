@@ -65,28 +65,26 @@ that there is no mapping for this modifier."
   :group 'term-keys/x11)
 
 
-(defun term-keys/x11-apply-mod-state (key shift lock control mod1 mod2 mod3 mod4 mod5)
+(defun term-keys/x11-apply-mod-state (keymap shift lock control mod1 mod2 mod3 mod4 mod5)
   "Apply modifier state flags to an X11 KeySym.
 
-Given a KeySym KEY which would be received by an application with
-no modifier flags, return the KeySym that would be received by
-the application if SHIFT, LOCK, CONTROL, MOD1, MOD2, MOD3, MOD4
-and MOD5 modifier flags are respectively active."
-  (cond
-   ((and (string-match-p "^[a-z]$" key) shift)
-    (upcase key))
-   ((string-equal key "Tab")
-    "ISO_Left_Tab")
-   (t
-    key)))
+Given a key (given in KEYMAP, a `term-keys/mapping' row) which
+would be received by an application with no modifier flags,
+return the KeySym that would be received by the application if
+SHIFT, LOCK, CONTROL, MOD1, MOD2, MOD3, MOD4 and MOD5 modifier
+flags are respectively active."
+  (or
+   (and shift (elt keymap 5))
+   (elt keymap 1)))
 
 
-(defun term-keys/x11-apply-mods (key mods)
-  "Apply Emacs modifiers to X11 KeySym KEY.
+(defun term-keys/x11-apply-mods (keymap mods)
+  "Apply Emacs modifiers to KEYMAP.
 
 Translate Emacs modifiers MODS to X11 modifiers (according to
 `term-keys/x11-modifier-map') and invoke
-`term-keys/x11-apply-mod-state')."
+`term-keys/x11-apply-mod-state').  KEYMAP is a
+`term-keys/mapping' row."
   (let (shift lock control mod1 mod2 mod3 mod4 mod5)
     (mapc
      (lambda (n)
@@ -111,7 +109,7 @@ Translate Emacs modifiers MODS to X11 modifiers (according to
 	   ('nil)
 	   (_ (error "Unknown modifier: %s" (elt term-keys/x11-modifier-map n))))))
      (number-sequence 0 (1- (length mods))))
-    (term-keys/x11-apply-mod-state key shift lock control mod1 mod2 mod3 mod4 mod5)))
+    (term-keys/x11-apply-mod-state keymap shift lock control mod1 mod2 mod3 mod4 mod5)))
 
 
 (provide 'term-keys-x11)
