@@ -367,7 +367,7 @@ Collect FUN's return values in a list and return it."
    for index from 0
    append
    (cl-loop
-    ;; Iterate from 0 to 2^64-1 for a bitmask of all modifier combinations
+    ;; Iterate from 0 to 2^6-1 for a bitmask of all modifier combinations
     for modnum from 0 to (1- (lsh 1 (length term-keys/modifier-chars)))
     ;; Convert the integer bitmask to a bool-vector
     for mods = (apply #'bool-vector (mapcar (lambda (n) (not (zerop (logand modnum (lsh 1 n)))))
