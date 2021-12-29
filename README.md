@@ -13,6 +13,7 @@ This package allows configuring Emacs and a supported terminal emulator to handl
       * [urxvt (rxvt-unicode)](#urxvt-rxvt-unicode)
       * [xterm](#xterm)
       * [kitty](#kitty)
+      * [Alacritty](#alacritty)
       * [Konsole](#konsole)
       * [Yakuake](#yakuake)
       * [Linux console](#linux-console)
@@ -211,6 +212,23 @@ To configure kitty for `term-keys`, use `term-keys/kitty-conf` to generate a `ki
 Then, add the output to your main `kitty.conf` file.
 
 You can customize kitty's mapping of GLFW modifiers to Emacs modifiers in the generated configuration using the respective `customize` group, i.e.: <kbd>M-:</kbd>`(progn (require 'term-keys-kitty) (customize-group 'term-keys/glfw))`
+
+#### Alacritty
+
+[Alacritty](https://github.com/alacritty/alacritty) is configured via its `alacritty.yml` configuration file.
+
+To configure alacritty for `term-keys`, use `term-keys/alacritty-config` to generate a `alacritty.yml` fragment:
+
+```elisp
+(require 'term-keys-alacritty)
+(with-temp-buffer
+  (insert (term-keys/alacritty-config))
+  (write-region (point-min) (point-max) "~/alacritty-for-term-keys.yml"))
+```
+
+Then, add the output to your main `alacritty.yml` file.
+
+You can customize Alacritty's mapping of its supported modifiers to Emacs modifiers in the generated configuration using the respective `customize` group, i.e.: <kbd>M-:</kbd>`(progn (require 'term-keys-alacritty) (customize-group 'term-keys/alacritty))`
 
 #### Konsole
 
