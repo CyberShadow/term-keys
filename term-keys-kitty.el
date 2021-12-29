@@ -31,11 +31,6 @@
 (require 'term-keys)
 
 
-(defconst term-keys/glfw-modifier-names ["SHIFT" "CONTROL" "ALT" "SUPER" "CAPS_LOCK" "NUM_LOCK"]
-  "GLFW keyboard modifiers (without the \"GLFW_MOD_\" prefix).
-
-https://www.glfw.org/docs/latest/group__mods.html")
-
 (defgroup term-keys/glfw nil
   "`term-keys' options for GLFW-based terminal emulators."
   :group 'term-keys)
@@ -58,7 +53,9 @@ This should be a vector of 6 elements, with each element being a
 string indicating the name of the GLFW modifier name (sans the
 \"GLFW_MOD_\" prefix) corresponding to the Emacs modifiers Shift,
 Control, Meta, Super, Hyper and Alt respectively.  nil indicates
-that there is no mapping for this modifier."
+that there is no mapping for this modifier.
+
+https://www.glfw.org/docs/latest/group__mods.html"
   :type '(vector
 	  (term-keys/glfw-modifier :tag "Shift")
 	  (term-keys/glfw-modifier :tag "Control")
