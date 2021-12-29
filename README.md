@@ -12,6 +12,7 @@ This package allows configuring Emacs and a supported terminal emulator to handl
     * [Terminal Emulators](#terminal-emulators)
       * [urxvt (rxvt-unicode)](#urxvt-rxvt-unicode)
       * [xterm](#xterm)
+      * [kitty](#kitty)
       * [Konsole](#konsole)
       * [Yakuake](#yakuake)
       * [Linux console](#linux-console)
@@ -194,6 +195,23 @@ See the `term-keys/xterm-*` definitions for more xterm-specific help code.
 
 You may also want to disable the `eightBitInput` `xterm` option, e.g. with `-xrm 'XTerm*eightBitInput: false'`.
 
+#### kitty
+
+[kitty](https://sw.kovidgoyal.net/kitty/) is configured via its `kitty.conf` configuration file.
+
+To configure kitty for `term-keys`, use `term-keys/kitty-conf` to generate a `kitty.conf` fragment:
+
+```elisp
+(require 'term-keys-kitty)
+(with-temp-buffer
+  (insert (term-keys/kitty-conf))
+  (write-region (point-min) (point-max) "~/kitty-for-term-keys.conf"))
+```
+
+Then, add the output to your main `kitty.conf` file.
+
+You can customize kitty's mapping of GLFW modifiers to Emacs modifiers in the generated configuration using the respective `customize` group, i.e.: <kbd>M-:</kbd>`(progn (require 'term-keys-kitty) (customize-group 'term-keys/glfw))`
+
 #### Konsole
 
 Konsole provides an interface for adding new and editing existing escape sequences for key combinations 
@@ -360,4 +378,4 @@ These terminals don't (directly) support customizing key bindings, and thus cann
 
 * [Fix Keyboard Input on Terminals](http://www.leonerd.org.uk/hacks/fixterms/) is a proposal to improve input in terminals, which is to some extent implemented in `xterm` and Emacs. Unfortunately, the proposed protocol is vague and incomplete, as it does not cover modifier keys and many PC keyboard keys.
 
-* The [Kitty terminal emulator](https://github.com/kovidgoyal/kitty) (the one written in Python, not [the PuTTY fork](http://www.9bis.net/kitty/)) implements [its own protocol extensions for keyboard handling](https://github.com/kovidgoyal/kitty/blob/master/protocol-extensions.asciidoc#keyboard-handling).
+* The [kitty terminal emulator](https://github.com/kovidgoyal/kitty) (the one written in Python, not [the PuTTY fork](http://www.9bis.net/kitty/)) implements [its own protocol extensions for keyboard handling](https://github.com/kovidgoyal/kitty/blob/master/protocol-extensions.asciidoc#keyboard-handling) (though it can also be simply configured with term-keys as [described above](#kitty)).
