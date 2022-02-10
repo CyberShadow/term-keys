@@ -219,7 +219,9 @@ Each item in the list is a 9-element vector:
 	    (string
 	     :tag "Shifted key name"))
 	   (string
-	    :tag "GLFW key name")))
+	    :tag "GLFW key name")
+	   (string
+	    :tag "winit key name")))
   :group 'term-keys)
 
 
