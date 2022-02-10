@@ -48,98 +48,98 @@ file."
 
 
 (defcustom term-keys/mapping
-  ;; Emacs		X11		TTY	Qt		macOS	Emacs shifted	X11 shifted	GLFW		winit
+  ;; Emacs		X11		TTY	Qt		macOS	Emacs shifted	X11 shifted	GLFW		winit           Qt shifted
 
-  '(["<escape>"		"Escape"	1	"Esc"		#x001B	nil		nil		"ESCAPE"	"Escape"	]
-    ["<f1>"		"F1"		59	"F1"		#xF704	nil		nil		"F1"		"F1"		]
-    ["<f2>"		"F2"		60	"F2"		#xF705	nil		nil		"F2"		"F2"		]
-    ["<f3>"		"F3"		61	"F3"		#xF706	nil		nil		"F3"		"F3"		]
-    ["<f4>"		"F4"		62	"F4"		#xF707	nil		nil		"F4"		"F4"		]
-    ["<f5>"		"F5"		63	"F5"		#xF708	nil		nil		"F5"		"F5"		]
-    ["<f6>"		"F6"		64	"F6"		#xF709	nil		nil		"F6"		"F6"		]
-    ["<f7>"		"F7"		65	"F7"		#xF70A	nil		nil		"F7"		"F7"		]
-    ["<f8>"		"F8"		66	"F8"		#xF70B	nil		nil		"F8"		"F8"		]
-    ["<f9>"		"F9"		67	"F9"		#xF70C	nil		nil		"F9"		"F9"		]
-    ["<f10>"		"F10"		68	"F10"		#xF70D	nil		nil		"F10"		"F10"		]
-    ["<f11>"		"F11"		87	"F11"		#xF70E	nil		nil		"F11"		"F11"		]
-    ["<f12>"		"F12"		88	"F12"		#xF70F	nil		nil		"F12"		"F12"		]
-    ["<print>"		"Print"		99	"Print"		#xF710	nil		nil		"PRINT_SCREEN"	"Snapshot"	]
-    ["<Scroll_Lock>"	"Scroll_Lock"	70	"ScrollLock"	nil	nil		nil		"SCROLL_LOCK"	"Scroll"	]
-    ["<pause>"		"Pause"		119	"Pause"		nil	nil		nil		"PAUSE"		"Pause"		]
+  '(["<escape>"		"Escape"	1	"Esc"		#x001B	nil		nil		"ESCAPE"	"Escape"	nil		]
+    ["<f1>"		"F1"		59	"F1"		#xF704	nil		nil		"F1"		"F1"		nil		]
+    ["<f2>"		"F2"		60	"F2"		#xF705	nil		nil		"F2"		"F2"		nil		]
+    ["<f3>"		"F3"		61	"F3"		#xF706	nil		nil		"F3"		"F3"		nil		]
+    ["<f4>"		"F4"		62	"F4"		#xF707	nil		nil		"F4"		"F4"		nil		]
+    ["<f5>"		"F5"		63	"F5"		#xF708	nil		nil		"F5"		"F5"		nil		]
+    ["<f6>"		"F6"		64	"F6"		#xF709	nil		nil		"F6"		"F6"		nil		]
+    ["<f7>"		"F7"		65	"F7"		#xF70A	nil		nil		"F7"		"F7"		nil		]
+    ["<f8>"		"F8"		66	"F8"		#xF70B	nil		nil		"F8"		"F8"		nil		]
+    ["<f9>"		"F9"		67	"F9"		#xF70C	nil		nil		"F9"		"F9"		nil		]
+    ["<f10>"		"F10"		68	"F10"		#xF70D	nil		nil		"F10"		"F10"		nil		]
+    ["<f11>"		"F11"		87	"F11"		#xF70E	nil		nil		"F11"		"F11"		nil		]
+    ["<f12>"		"F12"		88	"F12"		#xF70F	nil		nil		"F12"		"F12"		nil		]
+    ["<print>"		"Print"		99	"Print"		#xF710	nil		nil		"PRINT_SCREEN"	"Snapshot"	nil		]
+    ["<Scroll_Lock>"	"Scroll_Lock"	70	"ScrollLock"	nil	nil		nil		"SCROLL_LOCK"	"Scroll"	nil		]
+    ["<pause>"		"Pause"		119	"Pause"		nil	nil		nil		"PAUSE"		"Pause"		nil		]
 
-    ["`"		"grave"		43	"`"		?`	"~"		"asciitilde"	"GRAVE_ACCENT"	"Grave"		]
-    ["1"		"1"		2	"1"		?1	"!"		"exclam"	"1"		"Key1"		]
-    ["2"		"2"		3	"2"		?2	"@"		"at"		"2"		"Key2"		]
-    ["3"		"3"		4	"3"		?3	"#"		"numbersign"	"3"		"Key3"		]
-    ["4"		"4"		5	"4"		?4	"$"		"dollar"	"4"		"Key4"		]
-    ["5"		"5"		6	"5"		?5	"%"		"percent"	"5"		"Key5"		]
-    ["6"		"6"		7	"6"		?6	"^"		"asciicircum"	"6"		"Key6"		]
-    ["7"		"7"		8	"7"		?7	"&"		"ampersand"	"7"		"Key7"		]
-    ["8"		"8"		9	"8"		?8	"*"		"asterisk"	"8"		"Key8"		]
-    ["9"		"9"		10	"9"		?9	"("		"parenleft"	"9"		"Key9"		]
-    ["0"		"0"		11	"0"		?0	")"		"parenright"	"0"		"Key0"		]
-    ["-"		"minus"		12	"-"		?-	"_"		"underscore"	"MINUS"		"Minus"		]
-    ["="		"equal"		13	"="		?=	"+"		"plus"		"EQUAL"		"Equals"	]
-    ["<backspace>"	"BackSpace"	14	"Backspace"	#x007F	nil		nil		"BACKSPACE"	"Back"		]
-    ["<tab>"		"Tab"		15	"Tab"		#x0009	"<backtab>"	"ISO_Left_Tab"	"TAB"		"Tab"		]
-    ["q"		"q"		16	"Q"		?q	"Q"		"Q"		"Q"		"Q"		]
-    ["w"		"w"		17	"W"		?w	"W"		"W"		"W"		"W"		]
-    ["e"		"e"		18	"E"		?e	"E"		"E"		"E"		"E"		]
-    ["r"		"r"		19	"R"		?r	"R"		"R"		"R"		"R"		]
-    ["t"		"t"		20	"T"		?t	"T"		"T"		"T"		"T"		]
-    ["y"		"y"		21	"Y"		?y	"Y"		"Y"		"Y"		"Y"		]
-    ["u"		"u"		22	"U"		?u	"U"		"U"		"U"		"U"		]
-    ["i"		"i"		23	"I"		?i	"I"		"I"		"I"		"I"		]
-    ["o"		"o"		24	"O"		?o	"O"		"O"		"O"		"O"		]
-    ["p"		"p"		25	"P"		?p	"P"		"P"		"P"		"P"		]
-    ["["		"bracketleft"	26	"["		?\[	"{"		"braceleft"	"LEFT_BRACKET"	"LBracket"	]
-    ["]"		"bracketright"	27	"]"		?\]	"}"		"braceright"	"RIGHT_BRACKET"	"RBracket"	]
-    ["<return>"		"Return"	28	"Return"	#x000D	nil		nil		"ENTER"		"Return"	]
-    ["<Caps_Lock>"	"Caps_Lock"	58	"CapsLock"	nil	nil		nil		"CAPS_LOCK"	"Capital"	]
-    ["a"		"a"		30	"A"		?a	"A"		"A"		"A"		"A"		]
-    ["s"		"s"		31	"S"		?s	"S"		"S"		"S"		"S"		]
-    ["d"		"d"		32	"D"		?d	"D"		"D"		"D"		"D"		]
-    ["f"		"f"		33	"F"		?f	"F"		"F"		"F"		"F"		]
-    ["g"		"g"		34	"G"		?g	"G"		"G"		"G"		"G"		]
-    ["h"		"h"		35	"H"		?h	"H"		"H"		"H"		"H"		]
-    ["j"		"j"		36	"J"		?j	"J"		"J"		"J"		"J"		]
-    ["k"		"k"		37	"K"		?k	"K"		"K"		"K"		"K"		]
-    ["l"		"l"		38	"L"		?l	"L"		"L"		"L"		"L"		]
-    [";"		"semicolon"	39	";"		?\;	":"		"colon"		"SEMICOLON"	"Semicolon"	]
-    ["'"		"apostrophe"	40	"'"		?'	"\""		"quotedbl"	"APOSTROPHE"	"Apostrophe"	]
-    [nil		"Shift_L"	42	"Shift"		nil	nil		nil		"LEFT_SHIFT"	"LShift"	]
-    ["\\"		"backslash"	43	"\\"		?\\	"|"		"bar"		"BACKSLASH"	"Backslash"	]
-    ["z"		"z"		44	"Z"		?z	"Z"		"Z"		"Z"		"Z"		]
-    ["x"		"x"		45	"X"		?x	"X"		"X"		"X"		"X"		]
-    ["c"		"c"		46	"C"		?c	"C"		"C"		"C"		"C"		]
-    ["v"		"v"		47	"V"		?v	"V"		"V"		"V"		"V"		]
-    ["b"		"b"		48	"B"		?b	"B"		"B"		"B"		"B"		]
-    ["n"		"n"		49	"N"		?n	"N"		"N"		"N"		"N"		]
-    ["m"		"m"		50	"M"		?m	"M"		"M"		"M"		"M"		]
-    [","		"comma"		51	","		?,	"<"		"less"		"COMMA"		"Comma"		]
-    ["."		"period"	52	"."		?.	">"		"greater"	"PERIOD"	"Period"	]
-    ["/"		"slash"		53	"/"		?/	"?"		"question"	"SLASH"		"Slash"		]
-    [nil		"Shift_R"	54	"Shift"		nil	nil		nil		"RIGHT_SHIFT"	"RShift"	]
-    [nil		"Control_L"	29	"Ctrl"		nil	nil		nil		"LEFT_CONTROL"	"LControl"	]
-    [nil		"Super_L"	125	"Meta"		nil	nil		nil		"LEFT_SUPER"	"LWin"		]
-    [nil		"Alt_L"		56	"Alt"		nil	nil		nil		"LEFT_ALT"	"LAlt"		]
-    ["SPC"		"space"		57	"Space"		#x0020	nil		nil		"SPACE"		"Space"		]
-    [nil		"Alt_R"		100	"Alt"		nil	nil		nil		"RIGHT_ALT"	"RAlt"		]
-    [nil		"Super_R"	126	"Meta"		nil	nil		nil		"RIGHT_SUPER"	"RWin"		]
-    ["<menu>"		"Menu"		127	"Menu"		#x0010	nil		nil		"MENU"		"Apps"		]
-    [nil		"Control_R"	97	"Ctrl"		nil	nil		nil		"RIGHT_CONTROL"	"RControl"	]
+    ["`"		"grave"		43	"`"		?`	"~"		"asciitilde"	"GRAVE_ACCENT"	"Grave"		"~"		]
+    ["1"		"1"		2	"1"		?1	"!"		"exclam"	"1"		"Key1"		"!"		]
+    ["2"		"2"		3	"2"		?2	"@"		"at"		"2"		"Key2"		"@"		]
+    ["3"		"3"		4	"3"		?3	"#"		"numbersign"	"3"		"Key3"		"#"		]
+    ["4"		"4"		5	"4"		?4	"$"		"dollar"	"4"		"Key4"		"$"		]
+    ["5"		"5"		6	"5"		?5	"%"		"percent"	"5"		"Key5"		"%"		]
+    ["6"		"6"		7	"6"		?6	"^"		"asciicircum"	"6"		"Key6"		"^"		]
+    ["7"		"7"		8	"7"		?7	"&"		"ampersand"	"7"		"Key7"		"&"		]
+    ["8"		"8"		9	"8"		?8	"*"		"asterisk"	"8"		"Key8"		"*"		]
+    ["9"		"9"		10	"9"		?9	"("		"parenleft"	"9"		"Key9"		"("		]
+    ["0"		"0"		11	"0"		?0	")"		"parenright"	"0"		"Key0"		")"		]
+    ["-"		"minus"		12	"-"		?-	"_"		"underscore"	"MINUS"		"Minus"		"_"		]
+    ["="		"equal"		13	"="		?=	"+"		"plus"		"EQUAL"		"Equals"	"+"		]
+    ["<backspace>"	"BackSpace"	14	"Backspace"	#x007F	nil		nil		"BACKSPACE"	"Back"		nil		]
+    ["<tab>"		"Tab"		15	"Tab"		#x0009	"<backtab>"	"ISO_Left_Tab"	"TAB"		"Tab"		nil		]
+    ["q"		"q"		16	"Q"		?q	"Q"		"Q"		"Q"		"Q"		nil		]
+    ["w"		"w"		17	"W"		?w	"W"		"W"		"W"		"W"		nil		]
+    ["e"		"e"		18	"E"		?e	"E"		"E"		"E"		"E"		nil		]
+    ["r"		"r"		19	"R"		?r	"R"		"R"		"R"		"R"		nil		]
+    ["t"		"t"		20	"T"		?t	"T"		"T"		"T"		"T"		nil		]
+    ["y"		"y"		21	"Y"		?y	"Y"		"Y"		"Y"		"Y"		nil		]
+    ["u"		"u"		22	"U"		?u	"U"		"U"		"U"		"U"		nil		]
+    ["i"		"i"		23	"I"		?i	"I"		"I"		"I"		"I"		nil		]
+    ["o"		"o"		24	"O"		?o	"O"		"O"		"O"		"O"		nil		]
+    ["p"		"p"		25	"P"		?p	"P"		"P"		"P"		"P"		nil		]
+    ["["		"bracketleft"	26	"["		?\[	"{"		"braceleft"	"LEFT_BRACKET"	"LBracket"	"{"		]
+    ["]"		"bracketright"	27	"]"		?\]	"}"		"braceright"	"RIGHT_BRACKET"	"RBracket"	"}"		]
+    ["<return>"		"Return"	28	"Return"	#x000D	nil		nil		"ENTER"		"Return"	nil		]
+    ["<Caps_Lock>"	"Caps_Lock"	58	"CapsLock"	nil	nil		nil		"CAPS_LOCK"	"Capital"	nil		]
+    ["a"		"a"		30	"A"		?a	"A"		"A"		"A"		"A"		nil		]
+    ["s"		"s"		31	"S"		?s	"S"		"S"		"S"		"S"		nil		]
+    ["d"		"d"		32	"D"		?d	"D"		"D"		"D"		"D"		nil		]
+    ["f"		"f"		33	"F"		?f	"F"		"F"		"F"		"F"		nil		]
+    ["g"		"g"		34	"G"		?g	"G"		"G"		"G"		"G"		nil		]
+    ["h"		"h"		35	"H"		?h	"H"		"H"		"H"		"H"		nil		]
+    ["j"		"j"		36	"J"		?j	"J"		"J"		"J"		"J"		nil		]
+    ["k"		"k"		37	"K"		?k	"K"		"K"		"K"		"K"		nil		]
+    ["l"		"l"		38	"L"		?l	"L"		"L"		"L"		"L"		nil		]
+    [";"		"semicolon"	39	";"		?\;	":"		"colon"		"SEMICOLON"	"Semicolon"	":"		]
+    ["'"		"apostrophe"	40	"'"		?'	"\""		"quotedbl"	"APOSTROPHE"	"Apostrophe"	"\""		]
+    [nil		"Shift_L"	42	"Shift"		nil	nil		nil		"LEFT_SHIFT"	"LShift"	nil		]
+    ["\\"		"backslash"	43	"\\"		?\\	"|"		"bar"		"BACKSLASH"	"Backslash"	"|"		]
+    ["z"		"z"		44	"Z"		?z	"Z"		"Z"		"Z"		"Z"		nil		]
+    ["x"		"x"		45	"X"		?x	"X"		"X"		"X"		"X"		nil		]
+    ["c"		"c"		46	"C"		?c	"C"		"C"		"C"		"C"		nil		]
+    ["v"		"v"		47	"V"		?v	"V"		"V"		"V"		"V"		nil		]
+    ["b"		"b"		48	"B"		?b	"B"		"B"		"B"		"B"		nil		]
+    ["n"		"n"		49	"N"		?n	"N"		"N"		"N"		"N"		nil		]
+    ["m"		"m"		50	"M"		?m	"M"		"M"		"M"		"M"		nil		]
+    [","		"comma"		51	","		?,	"<"		"less"		"COMMA"		"Comma"		"<"		]
+    ["."		"period"	52	"."		?.	">"		"greater"	"PERIOD"	"Period"	">"		]
+    ["/"		"slash"		53	"/"		?/	"?"		"question"	"SLASH"		"Slash"		"?"		]
+    [nil		"Shift_R"	54	"Shift"		nil	nil		nil		"RIGHT_SHIFT"	"RShift"	nil		]
+    [nil		"Control_L"	29	"Ctrl"		nil	nil		nil		"LEFT_CONTROL"	"LControl"	nil		]
+    [nil		"Super_L"	125	"Meta"		nil	nil		nil		"LEFT_SUPER"	"LWin"		nil		]
+    [nil		"Alt_L"		56	"Alt"		nil	nil		nil		"LEFT_ALT"	"LAlt"		nil		]
+    ["SPC"		"space"		57	"Space"		#x0020	nil		nil		"SPACE"		"Space"		nil		]
+    [nil		"Alt_R"		100	"Alt"		nil	nil		nil		"RIGHT_ALT"	"RAlt"		nil		]
+    [nil		"Super_R"	126	"Meta"		nil	nil		nil		"RIGHT_SUPER"	"RWin"		nil		]
+    ["<menu>"		"Menu"		127	"Menu"		#x0010	nil		nil		"MENU"		"Apps"		nil		]
+    [nil		"Control_R"	97	"Ctrl"		nil	nil		nil		"RIGHT_CONTROL"	"RControl"	nil		]
 
-    ["<up>"		"Up"		103	"Up"		#xF700	nil		nil		"UP"		"Up"		]
-    ["<down>"		"Down"		108	"Down"		#xF701	nil		nil		"DOWN"		"Down"		]
-    ["<left>"		"Left"		105	"Left"		#xF702	nil		nil		"LEFT"		"Left"		]
-    ["<right>"		"Right"		106	"Right"		#xF703	nil		nil		"RIGHT"		"Right"		]
+    ["<up>"		"Up"		103	"Up"		#xF700	nil		nil		"UP"		"Up"		nil		]
+    ["<down>"		"Down"		108	"Down"		#xF701	nil		nil		"DOWN"		"Down"		nil		]
+    ["<left>"		"Left"		105	"Left"		#xF702	nil		nil		"LEFT"		"Left"		nil		]
+    ["<right>"		"Right"		106	"Right"		#xF703	nil		nil		"RIGHT"		"Right"		nil		]
 
-    ["<insert>"		"Insert"	110	"Ins"		#xF746	nil		nil		"INSERT"	"Insert"	]
-    ["<delete>"		"Delete"	111	"Del"		#xF728	nil		nil		"DELETE"	"Delete"	]
-    ["<home>"		"Home"		102	"Home"		#xF729	nil		nil		"HOME"		"Home"		]
-    ["<end>"		"End"		107	"End"		#xF72B	nil		nil		"END"		"End"		]
-    ["<prior>"		"Prior"		104	"PgUp"		#xF72C	nil		nil		"PAGE_UP"	"PageUp"	]
-    ["<next>"		"Next"		109	"PgDown"	#xF72D	nil		nil		"PAGE_DOWN"	"PageDown"	]
+    ["<insert>"		"Insert"	110	"Ins"		#xF746	nil		nil		"INSERT"	"Insert"	nil		]
+    ["<delete>"		"Delete"	111	"Del"		#xF728	nil		nil		"DELETE"	"Delete"	nil		]
+    ["<home>"		"Home"		102	"Home"		#xF729	nil		nil		"HOME"		"Home"		nil		]
+    ["<end>"		"End"		107	"End"		#xF72B	nil		nil		"END"		"End"		nil		]
+    ["<prior>"		"Prior"		104	"PgUp"		#xF72C	nil		nil		"PAGE_UP"	"PageUp"	nil		]
+    ["<next>"		"Next"		109	"PgDown"	#xF72D	nil		nil		"PAGE_DOWN"	"PageDown"	nil		]
 
     ;; Add new entries at the end of the list, to avoid disrupting
     ;; existing configurations.
@@ -148,7 +148,7 @@ file."
     )
   "List of keys supported by the `term-keys' package.
 
-Each item in the list is a 9-element vector:
+Each item in the list is a 10-element vector:
 
 0: The Emacs key name, as it occurs in `describe-key' or `kbd'.
    nil can be used to indicate keys which Emacs currently does
@@ -187,7 +187,12 @@ Each item in the list is a 9-element vector:
 
 8: The key name as it appears in the Rust winit crate's
    VirtualKeyCode enumeration:
-   https://docs.rs/glutin/0.28.0/glutin/event/enum.VirtualKeyCode.html"
+   https://docs.rs/glutin/0.28.0/glutin/event/enum.VirtualKeyCode.html
+
+9: The shifted Qt key name (i.e. the name when the same key
+   is pressed while holding Shift), if it is different from the
+   base name (index 3); otherwise, nil.  Assumes a standard US
+   ASCII layout."
   :type '(repeat
 	  (vector
 	   :tag "Key mapping"
@@ -221,7 +226,14 @@ Each item in the list is a 9-element vector:
 	   (string
 	    :tag "GLFW key name")
 	   (string
-	    :tag "winit key name")))
+	    :tag "winit key name")
+	   (choice
+	    :tag "Shifted Qt key name"
+	    (const
+	     :tag "Same as non-shifted"
+	     nil)
+	    (string
+	     :tag "Shifted key name"))))
   :group 'term-keys)
 
 

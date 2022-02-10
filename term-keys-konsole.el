@@ -91,7 +91,10 @@ an existing Konsole .keytab file."
 					      (not (elt term-keys/konsole-modifier-map n))))
 				       (number-sequence 0 (1- (length mods))))) ; 0..5
 	      (format "key %s%s : \"%s\"\n"
-		      (elt keymap 3) ; key name
+		      (or               ; Apply shift
+		       (and (elt mods 0) ; With Shift?
+			    (elt keymap 9)) ; Use shifted column
+		       (elt keymap 3))      ; Use non-shifted column
 		      (mapconcat
 		       (lambda (n)
 			 (if (elt term-keys/konsole-modifier-map n)
