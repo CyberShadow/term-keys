@@ -83,41 +83,42 @@ plutil -replace 'Window Settings.Basic.keyMapBoundKeys' \
   ~/Library/Preferences/com.apple.Terminal.plist"
 
   (with-temp-buffer
-    (xml-print
-     `((plist ((version . "1.0"))
-	      (dict nil .
-		    ,(apply #'nconc
-			    (term-keys/iterate-keys
-			     (lambda (index keymap mods)
+    (let ((xml-invalid-characters-re "\\<\\>"))
+      (xml-print
+       `((plist ((version . "1.0"))
+		(dict nil .
+		      ,(apply #'nconc
+			      (term-keys/iterate-keys
+			       (lambda (index keymap mods)
 
-			       (unless (and
-					;; Skip key combinations with unrepresentable modifiers
-					(cl-reduce (lambda (x y) (or x y)) ; any
-						   (mapcar (lambda (n) ; active modifier mapped to nil
-							     (and (elt mods n)
-								  (not (elt term-keys/terminal-app-modifier-map n))))
-							   (number-sequence 0 (1- (length mods))))) ; 0..5
-					;; Skip keys without a macOS Unicode key code
-					(elt keymap 4))
+				 (unless (and
+					  ;; Skip key combinations with unrepresentable modifiers
+					  (cl-reduce (lambda (x y) (or x y)) ; any
+						     (mapcar (lambda (n) ; active modifier mapped to nil
+							       (and (elt mods n)
+								    (not (elt term-keys/terminal-app-modifier-map n))))
+							     (number-sequence 0 (1- (length mods))))) ; 0..5
+					  ;; Skip keys without a macOS Unicode key code
+					  (elt keymap 4))
 
-				 `((key nil ,(concat
-					      (mapconcat
-					       (lambda (n)
-						 (when (elt mods n)
-						   (elt term-keys/terminal-app-modifier-map n)))
-					       (number-sequence 0 (1- (length mods))) ; 0..5
-					       "")
-					      (format "%04X" ; key code
-						      (or               ; Apply shift
-						       (and (elt mods 0) ; With Shift?
-							    (elt keymap 10)) ; Use shifted column
-						       (elt keymap 4)))))    ; Use non-shifted column
-				   (string nil ,(concat
-						 term-keys/prefix
-						 (term-keys/encode-key index mods)
-						 term-keys/suffix
-						 nil)))))))))))
-    (buffer-string)))
+				   `((key nil ,(concat
+						(mapconcat
+						 (lambda (n)
+						   (when (elt mods n)
+						     (elt term-keys/terminal-app-modifier-map n)))
+						 (number-sequence 0 (1- (length mods))) ; 0..5
+						 "")
+						(format "%04X" ; key code
+							(or               ; Apply shift
+							 (and (elt mods 0) ; With Shift?
+							      (elt keymap 10)) ; Use shifted column
+							 (elt keymap 4)))))    ; Use non-shifted column
+				     (string nil ,(concat
+						   term-keys/prefix
+						   (term-keys/encode-key index mods)
+						   term-keys/suffix
+						   nil)))))))))))
+      (buffer-string))))
 
 
 (provide 'term-keys-terminal-app)
