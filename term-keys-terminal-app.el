@@ -107,7 +107,11 @@ plutil -replace 'Window Settings.Basic.keyMapBoundKeys' \
 						   (elt term-keys/terminal-app-modifier-map n)))
 					       (number-sequence 0 (1- (length mods))) ; 0..5
 					       "")
-					      (format "%04X" (elt keymap 4)))) ; key code
+					      (format "%04X" ; key code
+						      (or               ; Apply shift
+						       (and (elt mods 0) ; With Shift?
+							    (elt keymap 10)) ; Use shifted column
+						       (elt keymap 4)))))    ; Use non-shifted column
 				   (string nil ,(concat
 						 term-keys/prefix
 						 (term-keys/encode-key index mods)
