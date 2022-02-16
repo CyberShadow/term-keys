@@ -110,6 +110,8 @@ plutil -replace 'Window Settings.Basic.keyMapBoundKeys' \
 						 "")
 						(format "%04X" ; key code
 							(or               ; Apply shift
+							 (and (elt mods 1) ; With Control?
+							      (elt keymap 11)) ; Use control column
 							 (and (elt mods 0) ; With Shift?
 							      (elt keymap 10)) ; Use shifted column
 							 (elt keymap 4)))))    ; Use non-shifted column
