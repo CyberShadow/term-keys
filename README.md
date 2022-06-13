@@ -85,7 +85,7 @@ Note that you will need to update the terminal emulator configuration every time
 
 #### urxvt (rxvt-unicode)
 
-There's two ways to configure `urxvt`: via command-line parameters or X resources.
+There's three ways to configure `urxvt` with `term-keys`: via command-line parameters, via X resources, or by invoking a `term-keys` function from Emacs.
 
 ##### Command-line parameters
 
