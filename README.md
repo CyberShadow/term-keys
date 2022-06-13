@@ -86,6 +86,9 @@ Note that you will need to update the terminal emulator configuration every time
 #### urxvt (rxvt-unicode)
 
 There's two ways to configure `urxvt`: via command-line parameters or X resources.
+
+##### Command-line parameters
+
 Command-line configuration consists in adding the key bindings to the `urxvt` invocation directly.
 You can use `term-keys/urxvt-script` to create a shell script in this manner:
 
@@ -104,6 +107,8 @@ $ sh ~/launch-urxvt-with-term-keys.sh -e emacs -nw
 
 This will launch Emacs under an `urxvt` instance configured for `term-keys`.
 
+##### X resources
+
 X resource configuration consists in adding the `term-keys` configuration to the X resources.
 The X resources are global (per X session), and will apply to all newly-started `urxvt` instances.
 You can use `term-keys/urxvt-xresources` to create the necessary configuration in this manner:
@@ -120,6 +125,8 @@ Then use `xrdb` to load the file into memory:
 ```bash
 $ xrdb -merge ~/.Xresources
 ```
+
+##### Direct invocation
 
 In addition to generating a static configuration as a shell script or X resources, you can ask `term-keys` to invoke `urxvt` directly.
 This has the benefit that it will always use the up-to-date `term-keys` configuration, but the downside that it must be done by invoking `emacs` or `emacsclient`.
