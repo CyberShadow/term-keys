@@ -108,7 +108,7 @@ file."
     [";"		"semicolon"	39	";"		?\;	":"		"colon"		"SEMICOLON"	"Semicolon"	":"	?:	nil	";"		]
     ["'"		"apostrophe"	40	"'"		?'	"\""		"quotedbl"	"APOSTROPHE"	"Apostrophe"	"\""	?\"	nil	"'"		]
     [nil		"Shift_L"	42	"Shift"		nil	nil		nil		"LEFT_SHIFT"	"LShift"	nil	nil	nil	"LeftShift"	]
-    ["\\"		"backslash"	43	"\\"		?\\	"|"		"bar"		"BACKSLASH"	"Backslash"	"|"	?|	#x001C	"\\"		]
+    ["\\"		"backslash"	43	"\\"		?\\	"|"		"bar"		"BACKSLASH"	"Backslash"	"|"	?|	#x001C	"\\\\"		]
     ["z"		"z"		44	"Z"		?z	"Z"		"Z"		"Z"		"Z"		nil	?Z	#x001A	"Z"		]
     ["x"		"x"		45	"X"		?x	"X"		"X"		"X"		"X"		nil	?X	#x0018	"X"		]
     ["c"		"c"		46	"C"		?c	"C"		"C"		"C"		"C"		nil	?C	#x0003	"C"		]
