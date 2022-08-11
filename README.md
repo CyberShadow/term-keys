@@ -13,6 +13,7 @@ This package allows configuring Emacs and a supported terminal emulator to handl
       * [urxvt (rxvt-unicode)](#urxvt-rxvt-unicode)
       * [xterm](#xterm)
       * [kitty](#kitty)
+      * [wezterm](#wezterm)
       * [Alacritty](#alacritty)
       * [Konsole](#konsole)
       * [Yakuake](#yakuake)
@@ -219,6 +220,23 @@ To configure kitty for `term-keys`, use `term-keys/kitty-conf` to generate a `ki
 Then, add the output to your main `kitty.conf` file.
 
 You can customize kitty's mapping of GLFW modifiers to Emacs modifiers in the generated configuration using the respective `customize` group, i.e.: <kbd>M-:</kbd>`(progn (require 'term-keys-kitty) (customize-group 'term-keys/glfw))`
+
+#### wezterm
+
+[wezterm](https://wezfurlong.org/wezterm/index.html) is configured via its `wezterm.lua` configuration file.
+
+To configure wezterm for `term-keys`, use `term-keys/wezterm-conf` to generate a `wezterm.lua` fragment:
+
+```elisp
+(require 'term-keys-wezterm)
+(with-temp-buffer
+  (insert (term-keys/wezterm-conf))
+  (write-region (point-min) (point-max) "~/wezterm-for-term-keys.lua"))
+```
+
+Then, add the output to your main `wezterm.lua` file.
+
+You can customize wezterm's mapping of GLFW modifiers to Emacs modifiers in the generated configuration using the respective `customize` group, i.e.: <kbd>M-:</kbd>`(progn (require 'term-keys-wezterm) (customize-group 'term-keys/glfw))`
 
 #### Alacritty
 
