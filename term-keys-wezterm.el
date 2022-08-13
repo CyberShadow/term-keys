@@ -75,7 +75,15 @@ https://www.glfw.org/docs/latest/group__mods.html"
 		     (number-sequence 0 (1- (length mods)))))) ; 0..5
 
 
-(defun term-keys/wezterm-format-key (mods)
+(defun term-keys/wezterm-format-key (keymap mods)
+  "Format key in wezterm syntax according to mods."
+  (or                    ; Apply shift
+   (and (elt mods 0)     ; With Shift?
+	(elt keymap 13)) ; Use shifted column
+   (elt keymap 12)))     ; Use non-shifted column
+
+
+(defun term-keys/wezterm-format-mods (mods)
   "Format modifiers in wezterm syntax.
 
 Returns the wezterm key combination string corresponding to the
@@ -100,8 +108,8 @@ according to the term-keys configuration."
 	         (term-keys/iterate-keys
 	          (lambda (index keymap mods)
 	            (format "  {key = \"%s\", mods = \"%s\", action = wezterm.action{SendString=\"%s\"}},\n"
-                            (elt keymap 12)
-		            (term-keys/wezterm-format-key mods)
+		            (term-keys/wezterm-format-key keymap mods)
+		            (term-keys/wezterm-format-mods mods)
 		            (mapconcat
 		             (lambda (c) (format "\\x%02x" c))
 		             (append
