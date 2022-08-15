@@ -29,50 +29,7 @@
 
 
 (require 'term-keys)
-
-
-(defgroup term-keys/glfw nil
-  "`term-keys' options for GLFW-based terminal emulators."
-  :group 'term-keys)
-
-(define-widget 'term-keys/glfw-modifier 'lazy
-  "Choice for GLFW key modifier state flags."
-  :type '(choice (const "SHIFT")
-		 (const "CONTROL")
-		 (const "ALT")
-		 (const "SUPER")
-		 (const "CAPS_LOCK")
-		 (const "NUM_LOCK")
-		 (const :tag "(none)" nil)))
-
-
-(defcustom term-keys/glfw-modifier-map ["SHIFT" "CTRL" "ALT" "SUPER" nil nil]
-  "Map of GLFW modifier state flags to Emacs modifiers.
-
-This should be a vector of 6 elements, with each element being a
-string indicating the name of the GLFW modifier name (sans the
-\"GLFW_MOD_\" prefix) corresponding to the Emacs modifiers Shift,
-Control, Meta, Super, Hyper and Alt respectively.  nil indicates
-that there is no mapping for this modifier.
-
-https://www.glfw.org/docs/latest/group__mods.html"
-  :type '(vector
-	  (term-keys/glfw-modifier :tag "Shift")
-	  (term-keys/glfw-modifier :tag "Control")
-	  (term-keys/glfw-modifier :tag "Meta")
-	  (term-keys/glfw-modifier :tag "Super")
-	  (term-keys/glfw-modifier :tag "Hyper")
-	  (term-keys/glfw-modifier :tag "Alt"))
-  :group 'term-keys/glfw)
-
-
-(defun term-keys/glfw-mods-representable (mods)
-  "Return non-nil if the given MODS vector is representable in GLFW."
-  (cl-reduce (lambda (x y) (and x y)) ; all
-	     (mapcar (lambda (n)
-		       (or (not (elt mods n)) ; inactive modifier
-			   (elt term-keys/glfw-modifier-map n))) ; mapped
-		     (number-sequence 0 (1- (length mods)))))) ; 0..5
+(require 'term-keys-glfw-mods)
 
 
 (defun term-keys/wezterm-format-key (keymap mods)
