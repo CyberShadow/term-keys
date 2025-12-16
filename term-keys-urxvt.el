@@ -67,8 +67,8 @@ resulting command line, the shortest prefix is used."
   "Format key modifiers in urxvt syntax.
 
 Returns key (given in KEYMAP, a `term-keys/mapping' row)
-prepended with appropriate modifiers depending on the elements of the bool vector
-MODS, and performing translation as necessary.
+prepended with appropriate modifiers depending on the elements of
+the bool vector MODS, and performing translation as necessary.
 
 If the KEY with MODS is unrepresentable, return nil."
 
