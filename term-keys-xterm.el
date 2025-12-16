@@ -130,10 +130,10 @@ This function is used for testing and as an example."
 	  (term-keys/xterm-args)
 	  (list
 	   "-xrm" "XTerm*eightBitInput: false"
-	    "-e" (car command-line-args) "-nw"
-	    "--load" term-keys/main-file-name
-	    "--funcall" "term-keys/init"
-	    ))))
+	   "-e" (car command-line-args) "-nw"
+	   "--load" term-keys/main-file-name
+	   "--funcall" "term-keys/init"
+	   ))))
 
 
 (provide 'term-keys-xterm)

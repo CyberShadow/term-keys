@@ -402,8 +402,8 @@ configuration file.  Current implementation uses base-96 (ASCII
 \x20 .. \x7F)."
   (apply #'string
 	 (nreverse (cl-loop while (not (zerop num))
-			       collect (+ 32 (% num 96))
-			       do (setq num (/ num 96))))))
+			    collect (+ 32 (% num 96))
+			    do (setq num (/ num 96))))))
 
 
 (defun term-keys/decode-number (str)
@@ -481,12 +481,12 @@ Collect FUN's return values in a list and return it."
   (term-keys/iterate-keys
    (lambda (index keymap mods)
      (define-key
-       input-decode-map
-       (concat
-	term-keys/prefix
-	(term-keys/encode-key index mods)
-	term-keys/suffix)
-       (kbd (term-keys/format-key keymap mods))))))
+      input-decode-map
+      (concat
+       term-keys/prefix
+       (term-keys/encode-key index mods)
+       term-keys/suffix)
+      (kbd (term-keys/format-key keymap mods))))))
 
 
 ;;;###autoload

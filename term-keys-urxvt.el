@@ -39,28 +39,28 @@ Performs translation according to `term-keys/x11-modifier-map',
 and rxvt's keysym_vocabulary.  To minimize the length of the
 resulting command line, the shortest prefix is used."
   (mapconcat
-     (lambda (n)
-       (if (elt mods n)
-	   (pcase (downcase (elt term-keys/x11-modifier-map n))
-	     ("shift"     "S-")
-	     ("lock"      "L-")
-	     ("control"   "C-")
-	     ("mod1"      "1-")
-	     ("mod2"      "2-")
-	     ("mod3"      "3-")
-	     ("mod4"      "4-")
-	     ("mod5"      "5-")
-	     ;; These are private to urxvt:
-	     ("meta"      "M-")
-	     ("numlock"   "N-")
-	     ("appkeypad" "K-")
-	     ("level3"    "I-")
-	     ;; Should be filtered ahead of time, using `term-keys/x11-key-representable'
-	     ('nil (error "Unsupported modifier: #%d" n))
-	     (_ (error "Unknown modifier: %s" (elt term-keys/x11-modifier-map n))))
-	 ""))
-     (number-sequence 0 (1- (length mods)))
-     ""))
+   (lambda (n)
+     (if (elt mods n)
+	 (pcase (downcase (elt term-keys/x11-modifier-map n))
+	   ("shift"     "S-")
+	   ("lock"      "L-")
+	   ("control"   "C-")
+	   ("mod1"      "1-")
+	   ("mod2"      "2-")
+	   ("mod3"      "3-")
+	   ("mod4"      "4-")
+	   ("mod5"      "5-")
+	   ;; These are private to urxvt:
+	   ("meta"      "M-")
+	   ("numlock"   "N-")
+	   ("appkeypad" "K-")
+	   ("level3"    "I-")
+	   ;; Should be filtered ahead of time, using `term-keys/x11-key-representable'
+	   ('nil (error "Unsupported modifier: #%d" n))
+	   (_ (error "Unknown modifier: %s" (elt term-keys/x11-modifier-map n))))
+       ""))
+   (number-sequence 0 (1- (length mods)))
+   ""))
 
 
 (defun term-keys/urxvt-format-key (keymap mods)
@@ -141,10 +141,10 @@ This function is used for testing and as an example."
 	 (append
 	  (term-keys/urxvt-args)
 	  (list
-	    "-e" (car command-line-args) "-nw"
-	    "--load" term-keys/main-file-name
-	    "--funcall" "term-keys/init"
-	    ))))
+	   "-e" (car command-line-args) "-nw"
+	   "--load" term-keys/main-file-name
+	   "--funcall" "term-keys/init"
+	   ))))
 
 
 (provide 'term-keys-urxvt)
