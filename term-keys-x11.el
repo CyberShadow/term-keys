@@ -124,5 +124,19 @@ Translate Emacs modifiers MODS to X11 modifiers (according to
     (term-keys/x11-apply-mod-state keymap shift lock control mod1 mod2 mod3 mod4 mod5)))
 
 
+(defun term-keys/escape-for-xresources (str)
+  "Escape special characters in STR for use in .Xresources.
+
+Escapes characters that would be interpreted by the C preprocessor
+\(run by xrdb) as string/character delimiters."
+  (apply #'concat
+         (mapcar (lambda (c)
+                   (pcase c
+                     (?\" "\\042")  ; double quote
+                     (?\' "\\047")  ; single quote
+                     (_   (string c))))
+                 str)))
+
+
 (provide 'term-keys-x11)
 ;;; term-keys-x11.el ends here
