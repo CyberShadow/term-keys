@@ -126,11 +126,13 @@ The returned string is suitable to be added as-is to an
   (apply #'concat
 	 (term-keys/iterate-keys
 	  (lambda (index keymap mods)
-	    (format "URxvt.keysym.%s: string:%s%s%s\n"
+	    (format "URxvt.keysym.%s: string:%s\n"
 		    (term-keys/urxvt-format-key keymap mods)
-		    term-keys/prefix
-		    (term-keys/encode-key index mods)
-		    term-keys/suffix)))))
+                    (term-keys/escape-for-xresources
+                     (concat
+                      term-keys/prefix
+                      (term-keys/encode-key index mods)
+                      term-keys/suffix)))))))
 
 
 (defun term-keys/urxvt-run-emacs ()
